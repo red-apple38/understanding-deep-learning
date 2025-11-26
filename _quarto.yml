@@ -1,0 +1,28 @@
+project:
+  type: book
+  output-dir: _site
+
+book:
+  title: "Deep Learning Portfolio: Gradient Descent"
+  author: "Your Name"
+  date: "2025-11-22"
+  chapters:
+    - index.qmd
+    - docs/beginner/gradient_descent/01_gd_fundamentals.ipynb
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+    right:
+      - icon: github
+        href: https://github.com/
+  sidebar:
+    style: "docked"
+    search: true
+  downloads: [pdf, epub]
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    code-fold: show

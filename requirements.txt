@@ -1,0 +1,8 @@
+numpy
+plotly
+streamlit
+quarto-cli
+pytest
+black
+ipykernel
+jupyterlab
