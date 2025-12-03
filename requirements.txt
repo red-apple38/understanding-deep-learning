@@ -6,3 +6,5 @@ pytest
 black
 ipykernel
 jupyterlab
+matplotlib
+seaborn

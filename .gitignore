@@ -4,7 +4,7 @@ __pycache__/
 .quarto/
 _site/
 .pytest_cache/
-.env
+
 
 /.quarto/
 **/*.quarto_ipynb
@@ -19,3 +19,9 @@ Thumbs.db
 
 # Python distribution
 *.egg-info/
+
+# Virtual Environment
+.venv/
+
+# Environment Variables
+.env
