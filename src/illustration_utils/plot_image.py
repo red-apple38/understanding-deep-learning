@@ -59,6 +59,4 @@ def show_illustration(image_relative_path, source_relative_path=None, **kwargs):
         else:
             print(f"Warning: Source text file not found at: {full_source_path}")
 
-    plt.show()
-    
     return fig, ax
