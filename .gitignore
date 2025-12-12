@@ -20,8 +20,5 @@ Thumbs.db
 # Python distribution
 *.egg-info/
 
-# Virtual Environment
 .venv/
-
-# Environment Variables
 .env
