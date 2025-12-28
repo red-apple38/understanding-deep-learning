@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>2&nbsp; Introduction Gradient Descent – Deep Learning Portfolio: Gradient Descent</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../docs/beginner/Perceptron.html" rel="prev">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-e007cafdc92152c0a24373e6323eafae.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Deep Learning Portfolio: Gradient Descent</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../../../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+    <div class="dropdown">
+      <a href="" title="Download" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label="Download"><i class="bi bi-download"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="../../../Deep-Learning-Portfolio--Gradient-Descent.pdf">
+              <i class="bi bi-file-pdf pe-1"></i>
+            Download PDF
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="../../../Deep-Learning-Portfolio--Gradient-Descent.epub">
+              <i class="bi bi-journal pe-1"></i>
+            Download ePub
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../docs/beginner/gradient_descent/01_gd_fundamentals.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction Gradient Descent</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../docs/beginner/Perceptron.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Perzeptron</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../docs/beginner/gradient_descent/01_gd_fundamentals.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction Gradient Descent</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#datengenerierung" id="toc-datengenerierung" class="nav-link active" data-scroll-target="#datengenerierung"><span class="header-section-number">2.1</span> 1. Datengenerierung</a></li>
+  <li><a href="#datenvisualisierung" id="toc-datenvisualisierung" class="nav-link" data-scroll-target="#datenvisualisierung"><span class="header-section-number">2.2</span> 2. Datenvisualisierung</a></li>
+  <li><a href="#generierung-der-training-und-validierungsdaten" id="toc-generierung-der-training-und-validierungsdaten" class="nav-link" data-scroll-target="#generierung-der-training-und-validierungsdaten"><span class="header-section-number">2.3</span> 3. Generierung der Training und Validierungsdaten</a></li>
+  <li><a href="#zufällige-initialisierung-der-modellparameter" id="toc-zufällige-initialisierung-der-modellparameter" class="nav-link" data-scroll-target="#zufällige-initialisierung-der-modellparameter"><span class="header-section-number">2.4</span> 4. Zufällige Initialisierung der Modellparameter</a></li>
+  <li><a href="#lossfunction" id="toc-lossfunction" class="nav-link" data-scroll-target="#lossfunction"><span class="header-section-number">2.5</span> 5.Lossfunction</a></li>
+  <li><a href="#partielle-ableitungen-und-gradient-descent-in-1d" id="toc-partielle-ableitungen-und-gradient-descent-in-1d" class="nav-link" data-scroll-target="#partielle-ableitungen-und-gradient-descent-in-1d"><span class="header-section-number">2.6</span> 6. Partielle Ableitungen und Gradient Descent in 1D</a></li>
+  <li><a href="#limitationen-der-globalen-lernrate-und-der-vereinfachten-update-regel" id="toc-limitationen-der-globalen-lernrate-und-der-vereinfachten-update-regel" class="nav-link" data-scroll-target="#limitationen-der-globalen-lernrate-und-der-vereinfachten-update-regel"><span class="header-section-number">2.7</span> 7. Limitationen der globalen Lernrate und der vereinfachten update Regel</a>
+  <ul class="collapse">
+  <li><a href="#unterschiedliche-lernraten" id="toc-unterschiedliche-lernraten" class="nav-link" data-scroll-target="#unterschiedliche-lernraten"><span class="header-section-number">2.7.1</span> Unterschiedliche Lernraten</a></li>
+  <li><a href="#erkenntnis" id="toc-erkenntnis" class="nav-link" data-scroll-target="#erkenntnis"><span class="header-section-number">2.7.2</span> Erkenntnis:</a></li>
+  </ul></li>
+  <li><a href="#chainrule" id="toc-chainrule" class="nav-link" data-scroll-target="#chainrule"><span class="header-section-number">2.8</span> 8. Chainrule</a></li>
+  <li><a href="#training" id="toc-training" class="nav-link" data-scroll-target="#training"><span class="header-section-number">2.9</span> 9. Training:</a></li>
+  <li><a href="#visualisierung-des-loss" id="toc-visualisierung-des-loss" class="nav-link" data-scroll-target="#visualisierung-des-loss"><span class="header-section-number">2.10</span> 10. Visualisierung des Loss</a>
+  <ul class="collapse">
+  <li><a href="#update-pfad" id="toc-update-pfad" class="nav-link" data-scroll-target="#update-pfad"><span class="header-section-number">2.10.1</span> Update Pfad</a></li>
+  </ul></li>
+  <li><a href="#viszualize-gradient-norm" id="toc-viszualize-gradient-norm" class="nav-link" data-scroll-target="#viszualize-gradient-norm"><span class="header-section-number">2.11</span> 11. Viszualize Gradient Norm</a></li>
+  <li><a href="#visualisierung-der-gradientenkomponenten" id="toc-visualisierung-der-gradientenkomponenten" class="nav-link" data-scroll-target="#visualisierung-der-gradientenkomponenten"><span class="header-section-number">2.12</span> 12. Visualisierung der Gradientenkomponenten</a></li>
+  <li><a href="#lineares-modell-und-designmatrix" id="toc-lineares-modell-und-designmatrix" class="nav-link" data-scroll-target="#lineares-modell-und-designmatrix"><span class="header-section-number">2.13</span> 13. Lineares Modell und Designmatrix</a></li>
+  <li><a href="#fehlerfunktion-ssemse-und-normalengleichungen" id="toc-fehlerfunktion-ssemse-und-normalengleichungen" class="nav-link" data-scroll-target="#fehlerfunktion-ssemse-und-normalengleichungen"><span class="header-section-number">2.14</span> 14. Fehlerfunktion (SSE/MSE) und Normalengleichungen</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction Gradient Descent</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In diesem Notebook werden wir das Konzept des Gradientenabstiegs anhand einer linearen Regression erarbeiten. Wir starten mit der Generierung von synthetischen Daten, definieren unser Modell und die Kostenfunktion (Loss Function) und implementieren anschließend den Optimierungsalgorithmus Schritt für Schritt.</p>
+<p><strong>What to do next</strong> - Mit Abschluss dieses Notebooks werden die Grundlagen gelegt um im nächsten Chapter die Grenzen des GD zu verstehen bei nicht linearen Feauturedimensionen und Räumen. - Start with the Backpropagation Chapter</p>
+<div id="cell-1" class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, importlib</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> clear_output, display</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> cm</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.ticker <span class="im">import</span> LinearLocator</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="cell-2" class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">53</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<section id="datengenerierung" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="datengenerierung"><span class="header-section-number">2.1</span> 1. Datengenerierung</h2>
+<p>Zuerst generieren wir synthetische Daten, die einer linearen Beziehung folgen: <span class="math inline">\(y = wx + b + \epsilon\)</span>. Dabei fügen wir ein Rauschen (Noise) <span class="math inline">\(\epsilon\)</span> hinzu, um reale Bedingungen zu simulieren.</p>
+<div id="cell-4" class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>true_m <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>true_b <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>num_gen_values <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>, num_gen_values) <span class="co"># no linkage term in MSE without noise</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>true_y <span class="op">=</span> true_m <span class="op">*</span> x <span class="op">+</span> true_b</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>sigma <span class="op">=</span> <span class="fl">0.9</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>white_noise <span class="op">=</span> rng.normal(<span class="fl">0.0</span>, sigma, num_gen_values)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>observed_y <span class="op">=</span> true_y <span class="op">+</span> white_noise</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="datenvisualisierung" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="datenvisualisierung"><span class="header-section-number">2.2</span> 2. Datenvisualisierung</h2>
+<p>Visualisierungen der Daten helfen uns einen Verständnis zu unseren Daten zu bilden, Probleme Frühzeitig zu erkennen und vieles mehr.</p>
+<div id="cell-6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:371}}" data-outputid="76d6cba2-94b0-4e09-bdae-e730f200008c">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> viz_data(viz_func,x_func, x_split, y_split,predlabel,func_label<span class="op">=</span><span class="st">"true"</span>):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">7</span>,<span class="dv">4</span>))</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  ax.plot(x, viz_func, c<span class="op">=</span><span class="st">"green"</span>, label<span class="op">=</span>func_label)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  ax.scatter(x_split, y_split, s<span class="op">=</span><span class="dv">3</span>, c<span class="op">=</span><span class="st">"red"</span>, label<span class="op">=</span>predlabel)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  ax.legend()</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  ax.grid()</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> fig, ax</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>fig0, ax0 <span class="op">=</span> viz_data(true_y,x,x,observed_y,<span class="st">"noise"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_gd_fundamentals_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="generierung-der-training-und-validierungsdaten" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="generierung-der-training-und-validierungsdaten"><span class="header-section-number">2.3</span> 3. Generierung der Training und Validierungsdaten</h2>
+<p>Aus unseren synthetisch erzeugten Daten erstellen wir ein Trainings und Validierungsplit, um das Modell auf einem Teil der Daten zu trainieren und seine Fähigkeit zur Generalisierung auf bisher ungesehene Daten zu überprüfen.</p>
+<div id="cell-8" class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> split(x,y,val_size<span class="op">=</span><span class="fl">0.2</span>, n<span class="op">=</span>num_gen_values):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  idx <span class="op">=</span> rng.permutation(n)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  n_val <span class="op">=</span> <span class="bu">int</span>((n<span class="op">*</span> val_size))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  n_train <span class="op">=</span> n <span class="op">-</span> n_val</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  train_idx <span class="op">=</span> idx[:n_train]</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  val_idx <span class="op">=</span> idx[n_train:]</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  x_train, x_val <span class="op">=</span> x[train_idx], x[val_idx]</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  y_train, y_val <span class="op">=</span> y[train_idx], y[val_idx]</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> x_train, x_val, y_train, y_val, train_idx, val_idx</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="cell-9" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:722}}" data-outputid="b548f817-95c0-43cf-c846-b426ce7d13ea">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>x_train, x_val, y_train, y_val, t_idx, v_idx <span class="op">=</span> split(x,observed_y)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>fig1, ax1 <span class="op">=</span> viz_data(true_y,x,x_train,y_train,<span class="st">"train data"</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>fig2, ax2 <span class="op">=</span> viz_data(true_y,x,x_val,y_val,<span class="st">"val data"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_gd_fundamentals_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_gd_fundamentals_files/figure-html/cell-7-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="zufällige-initialisierung-der-modellparameter" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="zufällige-initialisierung-der-modellparameter"><span class="header-section-number">2.4</span> 4. Zufällige Initialisierung der Modellparameter</h2>
+<p>Wir initilalsieren die Parameter <strong>w</strong> und <strong>b</strong> zufällig.</p>
+<div id="cell-11" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="8b238ff4-c865-49b8-fa8a-2b4d6dc3a195">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> rng.random()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> rng.random()</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> predict(x,w,b):</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  y_hat <span class="op">=</span> w <span class="op">*</span> x <span class="op">+</span> b</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> y_hat</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>y_hat <span class="op">=</span> predict(x_train,w,b)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"zufällige Initialisierung mit Steigung von: </span><span class="sc">{</span>w<span class="sc">}</span><span class="ss"> und Achsenabschnitt </span><span class="sc">{</span>b<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>zufällige Initialisierung mit Steigung von: 0.507637862250508 und Achsenabschnitt 0.8148854343292782</code></pre>
+</div>
+</div>
+<p>Plotten wir nun die Prediction y_hat mit unseren zufälligen Parametern.</p>
+<div id="cell-13" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:368}}" data-outputid="bea791e0-3bd2-48cc-ae46-fbcfa1da5adf">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ax1.scatter(x_train,y_hat, color<span class="op">=</span><span class="st">"blue"</span>, label<span class="op">=</span><span class="st">"random model"</span>, s<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>ax1.legend()</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>fig1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="37">
+<div>
+<figure class="figure">
+<p><img src="01_gd_fundamentals_files/figure-html/cell-9-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="lossfunction" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="lossfunction"><span class="header-section-number">2.5</span> 5.Lossfunction</h2>
+<p>Wir können direkt erkennen, dass unsere zufällig generierte Funktion die Daten nicht gut abbildet. Um das zu quantifizieren, brauchen wir eine Verlustfunktion.</p>
+<p>Für das Regressionsproblem, welches wir lösen wollen, halten wir es simpel mit dem Mean Squared Error. Wie man in der Summenschreibweise erkennt, gibt es bei unserem linearen Modell einen Kopplungsterm <span class="math inline">\(2 \cdot b \cdot w \cdot \sum(x)\)</span>. Durch das Zentrieren von <span class="math inline">\(x\)</span> wird die Summe 0 und somit fällt der Term später weg. Bei unseren Daten mit Rauschen wird dieser kleiner und auch somit der Einfluss von <span class="math inline">\(w\)</span> auf <span class="math inline">\(b\)</span> in Bezug auf das MSE und vice versa.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\displaystyle
+MSE &amp;= \frac{1}{n} \sum\limits_{i=1}^{n} error_i^2 \\[8pt]
+    &amp;= \frac{1}{n} \sum\limits_{i=1}^{n} (\hat{y}_i - y_i)^2 \\[8pt]
+    &amp;= \frac{1}{n} \sum\limits_{i=1}^{n} (b + w x_i - y_i)^2 \\[8pt]
+    &amp;= \frac{1}{n} \Bigg(
+        \sum\limits_{i=1}^{n} y_i^2
+        - 2b \sum\limits_{i=1}^{n} y_i
+        - 2w \sum\limits_{i=1}^{n} x_i y_i
+        + b^2 n
+        + {\color{red}{2bw \sum\limits_{i=1}^{n} x_i}}
+        + w^2 \sum\limits_{i=1}^{n} x_i^2
+      \Bigg)
+\end{aligned}
+\]</span></p>
+<p>Als nächstes setzen wir den Error über den Trainingsdatensatz in unsere Funktion ein, hier über error = (yhat-y).</p>
+<div id="cell-16" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="2884a342-ba26-46cf-9d54-f4c6b23e48a4">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mse(y, y_hat):</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> (<span class="dv">1</span><span class="op">/</span><span class="bu">len</span>(y)) <span class="op">*</span> np.<span class="bu">sum</span>((y_hat<span class="op">-</span>y)<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dmse_dyhat(y,y_hat):</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> (<span class="dv">2</span><span class="op">/</span>y.size) <span class="op">*</span> (y_hat<span class="op">-</span>y)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>loss <span class="op">=</span> mse(y_train,y_hat)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(loss)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>20.28441569406824</code></pre>
+</div>
+</div>
+<p>Auch wenn manche direkt durch scharfes sehen erkennen, dass große Außreißer in unseren Daten stärker in den MSE einfließen, macht es Sinn sich die Funktion plotten zu lassen, sodass man auf Anhieb auch erkennt wieso. Der Übertrag zum Gradientenabstieg (dazu gleich mehr) findet statt wenn man auch die Ableitung der Funktion genauer anschaut damit man auch den Einfluss der Lossfunction auf den Graidenten erkennt.</p>
+<p>Häufig wird die Fehlannahme getroffen man könnte ein Datensatz einfach explorieren und Außreißer entfernen, jedoch kann man damit sehr schnell fehlannahen treffen. Im Beispiel der Biologie wird dass schnell deutlich, sehr häufig haben gleiche Blutproben die man zur Untersuchung in unterschiedliche Labore schickt, unterschiedliche Blutwerte. Dass kann durch unterschiedliche Messmethoden, schlechter Kühlung beim Transport oder intrinsichen Reaktionen entstehen. Unser Modell soll lernen mit rauschen umzugehen. Natürlich bedeutet es nicht das man offensichtliche Messfehler bereinigen sollte. Aber es ist ein heikles Thema da meist Domänenwissen erforderlich ist.</p>
+<p>Findige Leser werden sofort über eine Methodik nachdenken wie man z.B durch skalierende Transformationen und Normalisierungsverfahren den MSE besser unter Kontrolle hält. Das werden wir in einem anderen Kapitel genauer behandeln.</p>
+<p>In unserem zweiten Plott würden wir auch sofort den einfluss vom MSE auf den Gradientenabstieg erkennen. Große Residuen führen zu hohen Steigungen im Fehlerterm, was wiederum zu großen Gradienten führt. Ein Teufelskreislauf.</p>
+<div id="cell-18" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:410}}" data-outputid="9c94acc6-0fe9-49f0-cbef-2d7610023988">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>viz_true_y <span class="op">=</span> np.zeros(<span class="dv">1</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>viz_range_y <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">10</span>,<span class="dv">10</span>, <span class="dv">100</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>viz_mse <span class="op">=</span> [mse(viz_true_y,i) <span class="cf">for</span> i <span class="kw">in</span> viz_range_y]</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>viz_dmse <span class="op">=</span> [dmse_dyhat(viz_true_y,i) <span class="cf">for</span> i <span class="kw">in</span> viz_range_y]</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>fig3, (ax3,ax4) <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>,figsize<span class="op">=</span>(<span class="dv">14</span>,<span class="dv">4</span>))</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>ax3.plot(viz_range_y, viz_mse, c<span class="op">=</span><span class="st">"r"</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>ax3.set_ylabel(<span class="st">"MSE"</span>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>ax3.set_xlabel(<span class="st">"Error"</span>)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>ax3.set_title(<span class="st">"MSE Function"</span>)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>ax3.grid()</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>ax4.plot(viz_range_y, viz_dmse, c<span class="op">=</span><span class="st">"r"</span>)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>ax4.set_ylabel(<span class="st">"dMSE"</span>)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>ax4.set_xlabel(<span class="st">"Error"</span>)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>ax4.set_title(<span class="st">"MSE partial derivate"</span>)</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>ax4.grid()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_gd_fundamentals_files/figure-html/cell-11-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Für Simulationszwecke wird nun eine kleine Klasse angelegt, um später bei der Visualisierung Coderedundazen zu vermeiden. Diese Zelle kann gerne übersprungen werden.</p>
+<div id="cell-20" class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Calculator():</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, x: np.ndarray, y: np.ndarray, start_axis<span class="op">=</span><span class="dv">0</span>, stop_axis<span class="op">=</span><span class="dv">4</span>):</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>      <span class="cf">assert</span> x.size <span class="op">==</span> y.size, <span class="st">"Shape missmatch, can cause Problems later"</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">AssertionError</span> <span class="im">as</span> error:</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>      <span class="bu">print</span>(error)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.x <span class="op">=</span> x</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.y <span class="op">=</span> y</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Terms</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.Syy <span class="op">=</span> np.<span class="bu">sum</span>(y<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.Sxy <span class="op">=</span> np.<span class="bu">sum</span>(y <span class="op">*</span> x)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.Sxx <span class="op">=</span> np.<span class="bu">sum</span>(x<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.Sx <span class="op">=</span> np.<span class="bu">sum</span>(x)</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.Sy <span class="op">=</span> np.<span class="bu">sum</span>(y)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.n <span class="op">=</span> <span class="bu">len</span>(y)</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">#axis</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.w_axis : np.ndarray <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.b_axis : np.ndarray <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.w_mesh : np.ndarray <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.b_mesh : np.ndarray <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.set_mesh(start_axis,stop_axis)</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> mse(<span class="va">self</span>, w <span class="op">=</span> <span class="va">None</span>, b <span class="op">=</span> <span class="va">None</span>, is_mesh<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> w <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="kw">and</span> b <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>      w <span class="op">=</span> np.asarray(w)</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>      b <span class="op">=</span> np.asarray(b)</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> (w <span class="kw">is</span> <span class="va">None</span>) <span class="op">!=</span> (b <span class="kw">is</span> <span class="va">None</span>):</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>      <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"w or b value missing"</span>)</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> <span class="kw">not</span> is_mesh:</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>          w <span class="op">=</span> <span class="va">self</span>.w_axis</span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>          b <span class="op">=</span> <span class="va">self</span>.b_axis</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>      <span class="cf">else</span>:</span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>        w <span class="op">=</span> <span class="va">self</span>.w_mesh</span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>        b <span class="op">=</span> <span class="va">self</span>.b_mesh</span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>    term <span class="op">=</span> (<span class="va">self</span>.Syy <span class="op">-</span> <span class="dv">2</span><span class="op">*</span>w<span class="op">*</span><span class="va">self</span>.Sxy <span class="op">-</span> <span class="dv">2</span><span class="op">*</span>b<span class="op">*</span><span class="va">self</span>.Sy <span class="op">+</span> w<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> <span class="va">self</span>.Sxx</span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>            <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>w<span class="op">*</span>b<span class="op">*</span><span class="va">self</span>.Sx <span class="op">+</span> <span class="va">self</span>.n<span class="op">*</span>(b<span class="op">**</span><span class="dv">2</span>) )</span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>    mse <span class="op">=</span> term<span class="op">/</span><span class="va">self</span>.n</span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> mse</span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> grad_b(<span class="va">self</span>,w,b):</span>
+<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>    term <span class="op">=</span> (<span class="op">-</span> <span class="dv">2</span><span class="op">*</span><span class="va">self</span>.Sy</span>
+<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>            <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>w<span class="op">*</span><span class="va">self</span>.Sx <span class="op">+</span> <span class="dv">2</span><span class="op">*</span><span class="va">self</span>.n<span class="op">*</span>(b))</span>
+<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>    dmse_db <span class="op">=</span> term<span class="op">/</span><span class="va">self</span>.n</span>
+<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dmse_db</span>
+<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> grad_w(<span class="va">self</span>,w,b):</span>
+<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a>    term <span class="op">=</span> (<span class="op">-</span> <span class="dv">2</span><span class="op">*</span><span class="va">self</span>.Sxy <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> w <span class="op">*</span> <span class="va">self</span>.Sxx</span>
+<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>            <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>b<span class="op">*</span><span class="va">self</span>.Sx )</span>
+<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>    dmse_dw <span class="op">=</span> term<span class="op">/</span><span class="va">self</span>.n</span>
+<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dmse_dw</span>
+<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> set_mesh(<span class="va">self</span>,start,stop, n<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a>      n <span class="op">=</span> <span class="va">self</span>.n</span>
+<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.w_axis <span class="op">=</span> np.linspace(start,stop,n)</span>
+<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.b_axis <span class="op">=</span> np.linspace(start,stop,n)</span>
+<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.w_mesh, <span class="va">self</span>.b_mesh <span class="op">=</span> np.meshgrid(<span class="va">self</span>.w_axis,<span class="va">self</span>.b_axis)</span>
+<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Nun schauen wir uns den Einfluss unsere Modellparameter w und b bezüglich des MSE anhand unserer Trainingsdaten an wir können dabei folgende Annahmen treffen:</p>
+<ol type="1">
+<li><p>Der Bias Term hat mit unseren Feautures und dem linearen Modell einen schwächeren Einfluss als w -&gt; Additiv vs Multiplikativ. Eine Skalierung, Transformation bsw. der Feautures (x Werte), kann das natürlich ändern.</p></li>
+<li><p>Durch das hinzufügen von normalverteilten Rauschen ist der Fehler selbst bei wahren Parametern nicht mehr 0 <em>(true_m, true_b)</em> . Das heißt unsere optimalen Modell Parameter unterscheiden sich von den “wahren” Werten. (Analytische Berechnung zum Schluss)</p></li>
+<li><p>Aus 2. Das Minimum der Fehlerfunktion ist nicht 0.</p></li>
+</ol>
+<div id="cell-22" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:831}}" data-outputid="0e2244da-0380-4d31-e5bb-d55c061b476a">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>term <span class="op">=</span> Calculator(x_train, y_train)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>mse_value <span class="op">=</span> term.mse(term.w_mesh,term.b_mesh)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> surface_3d(w_mesh, b_mesh, mse, title, dpi<span class="op">=</span><span class="dv">200</span>, z_lim<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  fig, ax <span class="op">=</span> plt.subplots(subplot_kw<span class="op">=</span>{<span class="st">"projection"</span>: <span class="st">"3d"</span>})</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  surf <span class="op">=</span> ax.plot_surface(w_mesh, b_mesh, mse, cmap<span class="op">=</span>cm.coolwarm,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>                       linewidth<span class="op">=</span><span class="dv">0</span>, antialiased<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>                       zsort<span class="op">=</span><span class="st">'average'</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> z_lim <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    ax.set_zlim(z_lim)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  ax.zaxis.set_major_formatter(<span class="st">'</span><span class="sc">{x:.02f}</span><span class="st">'</span>)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  fig.colorbar(surf, shrink<span class="op">=</span><span class="fl">0.5</span>, aspect<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  ax.zaxis.set_major_locator(LinearLocator(<span class="dv">10</span>))</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  ax.set_title(title)</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  ax.set_xlabel(<span class="st">"w"</span>)</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  ax.set_ylabel(<span class="st">"b"</span>)</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> fig, ax</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mse_contour(</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    w_axis, b_axis, mse, w_pred, b_pred,true_m<span class="op">=</span>true_m, true_b<span class="op">=</span>true_b,</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>):</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>  fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>,figsize<span class="op">=</span>(<span class="dv">14</span>,<span class="dv">4</span>))</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>  cf <span class="op">=</span> ax1.contourf(w_axis,b_axis, mse, levels<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>  c <span class="op">=</span> ax1.contour(w_axis,b_axis,mse, levels<span class="op">=</span>cf.levels,colors<span class="op">=</span><span class="st">"black"</span> ,linewidths<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>  fig.colorbar(cf, ax<span class="op">=</span>ax1, label<span class="op">=</span><span class="st">"MSE"</span>)</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>  ax2.set_axis_off()</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>  ax1.set_xlabel(<span class="st">"w"</span>)</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>  ax1.set_ylabel(<span class="st">"b"</span>)</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>  ax1.set_title(<span class="st">"Loss-Ground"</span>)</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>  ax1.plot(true_m, true_b, <span class="st">"go"</span>, ms<span class="op">=</span><span class="dv">5</span>, label<span class="op">=</span><span class="vs">r"true"</span>)</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>  ax1.plot(w_pred, b_pred, <span class="st">"ro"</span>, ms<span class="op">=</span><span class="dv">5</span>, label<span class="op">=</span><span class="st">"prediction"</span>)</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>  ax1.legend()</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> fig, ax1, ax2</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>figx, axx <span class="op">=</span> surface_3d(term.w_mesh, term.b_mesh, mse_value,<span class="st">"Loss Surface"</span>, z_lim<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>fi4, ax1, ax2 <span class="op">=</span> mse_contour(term.w_axis, term.b_axis, mse_value, w, b)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_gd_fundamentals_files/figure-html/cell-13-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_gd_fundamentals_files/figure-html/cell-13-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Steigung der Funktion bei fixiertem b bzw. w. Wir können demensprechend eine horizontale bzw. vertikale in die Lossschüssel einzeichnen und merken schnell dass die Parameter unterschiedlichen Einfluss auf den MSE haben. Die Funktion auf der rechten Seite ist nichts anderes als die Visualiserung dieser Linien.</p>
+<div id="cell-24" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:803}}" data-outputid="e83f3df0-8318-4ea1-d3dd-9ee818c9f194">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>fig5, ax1, ax2 <span class="op">=</span> mse_contour(term.w_axis, term.b_axis, mse_value, w, b)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>FIXED_B <span class="op">=</span> <span class="fl">1.5</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>ax1.axhline(FIXED_B, color<span class="op">=</span><span class="st">"red"</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>ax1.set_title(<span class="ss">f"fixed b = </span><span class="sc">{</span>FIXED_B<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> input_check(label: <span class="bu">str</span>):</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  lab <span class="op">=</span> label.lower()</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> lab <span class="kw">not</span> <span class="kw">in</span> {<span class="st">"w"</span>, <span class="st">"b"</span>}:</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"Input has to be w or b"</span>)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> lab</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> viz_mse_fixed_param(term: Calculator, ax_object,coord_x_axis, x_axis_label, param, title):</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  lab <span class="op">=</span> input_check(x_axis_label)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> lab <span class="op">==</span> <span class="st">"w"</span>:</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    mse_fix <span class="op">=</span> term.mse(coord_x_axis, param <span class="op">*</span> np.ones_like(coord_x_axis))</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span>:</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    mse_fix <span class="op">=</span> term.mse(param <span class="op">*</span> np.ones_like(coord_x_axis),coord_x_axis)</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  ax2.set_axis_on()</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  ax2.grid()</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  ax2.set_ylabel(<span class="st">"MSE"</span>)</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>  ax2.set_xlabel(lab)</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>  ax2.set_title(title)</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>  ax2.plot(coord_x_axis, mse_fix)</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>viz_mse_fixed_param(term, ax2, term.w_axis, <span class="st">"w"</span>, FIXED_B, <span class="ss">f"Loss with Fixed b = </span><span class="sc">{</span>FIXED_B<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>fig6, ax1, ax2 <span class="op">=</span> mse_contour(term.w_axis, term.b_axis, mse_value, w, b)</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>FIXED_W <span class="op">=</span> <span class="bu">float</span>(<span class="fl">1.5</span>)</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>ax1.axvline(FIXED_W, color<span class="op">=</span><span class="st">"red"</span>)</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>ax1.set_title(<span class="ss">f"fixed w = </span><span class="sc">{</span>FIXED_W<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>viz_mse_fixed_param(term, ax2, term.b_axis, <span class="st">"b"</span>, FIXED_W, <span class="ss">f"Loss with Fixed w = </span><span class="sc">{</span>FIXED_W<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_gd_fundamentals_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_gd_fundamentals_files/figure-html/cell-14-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="partielle-ableitungen-und-gradient-descent-in-1d" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="partielle-ableitungen-und-gradient-descent-in-1d"><span class="header-section-number">2.6</span> 6. Partielle Ableitungen und Gradient Descent in 1D</h2>
+<p>Um zu verstehen, wie sich die Parameter <span class="math inline">\(w\)</span> und <span class="math inline">\(b\)</span> <strong>unabhängig voneinander</strong> auf den Fehler auswirken, betrachten wir sie einzeln:</p>
+<p><strong>Linker Plot:</strong> Zeigt den MSE-Verlauf in Abhängigkeit von einem Parameter (<span class="math inline">\(w\)</span> oder <span class="math inline">\(b\)</span>), während der andere fixiert bleibt.</p>
+<p><strong>Rechter Plot:</strong> Zeigt die zugehörige partielle Ableitung <span class="math inline">\(\frac{\partial \text{MSE}}{\partial w}\)</span> bzw. <span class="math inline">\(\frac{\partial \text{MSE}}{\partial b}\)</span>.</p>
+<p>Wir führen Gradient Descent Updates <strong>nur für einen Parameter</strong> durch, nach der Update-Regel:</p>
+<p><span class="math inline">\(\text{Parameter}_{\text{neu}} = \text{Parameter}_{\text{alt}} - \alpha \cdot \frac{\partial \text{MSE}}{\partial \text{Parameter}}\)</span></p>
+<p>wobei <span class="math inline">\(\alpha\)</span> die Lernrate ist.</p>
+<p>Der Gradient zeigt in die Richtung des steilsten Anstiegs, deshalb das <strong>-</strong> Vorzeichen, weil wir in Richtung des steilsten Abstiegs updaten.</p>
+<div id="cell-26" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:817}}" data-outputid="36cf7ae9-3338-4eba-d151-de4964f20907">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ∂MSE/∂w bei fixem b</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># entkopplung von w und b sichtbar durch zentrieren</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> viz_pderivate(term: Calculator, axis, fixed_param_value, label_x_axis):</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  lab <span class="op">=</span> input_check(label_x_axis)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> lab <span class="op">==</span> <span class="st">"w"</span>:</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    mse <span class="op">=</span> term.mse(axis, fixed_param_value <span class="op">*</span> np.ones_like(axis))</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    grad_component <span class="op">=</span> term.grad_w(axis,fixed_param_value)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    title_ <span class="op">=</span> <span class="st">"b"</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span>:</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    mse <span class="op">=</span> term.mse(fixed_param_value <span class="op">*</span> np.ones_like(axis), axis)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    grad_component <span class="op">=</span> term.grad_b(fixed_param_value,axis)</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    title_ <span class="op">=</span> <span class="st">"w"</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  fig, (axL, axR) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">14</span>,<span class="dv">4</span>), constrained_layout<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  axL.plot(axis, mse, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>  axL.set_xlabel(lab)</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>  axL.set_title(<span class="ss">f"MSE with fixed (</span><span class="sc">{</span>title_<span class="sc">}</span><span class="ss">=</span><span class="sc">{</span>fixed_param_value<span class="sc">}</span><span class="ss">)"</span>)</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  axL.set_ylabel(<span class="st">"MSE"</span>)</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  axR.plot(axis, grad_component)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>  axR.axhline(<span class="dv">0</span>, ls<span class="op">=</span><span class="st">"--"</span>, lw<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>  axR.set_xlabel(lab)</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>  axR.set_ylabel(<span class="ss">f"∂MSE/∂</span><span class="sc">{</span>lab<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  axR.set_title(<span class="ss">f"∂MSE/∂</span><span class="sc">{</span>lab<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> fig, (axL,axR), fixed_param_value</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> viz_update(term: Calculator,</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>               ax,</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>               ax2,</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>               update_trgt,</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>               fixed_param_value,</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>               label_x_axis,</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>               learning_rate <span class="op">=</span> <span class="fl">0.01</span>,</span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>               n_loop<span class="op">=</span><span class="dv">1</span></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>               ):</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>  lab <span class="op">=</span> input_check(label_x_axis)</span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>  x , y, grad_list, step <span class="op">=</span> [], [], [], []</span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>  counter <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_loop):</span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> lab <span class="op">==</span> <span class="st">"w"</span>:</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>      mse <span class="op">=</span> term.mse(update_trgt, fixed_param_value)</span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>      grad_component <span class="op">=</span> term.grad_w(update_trgt,fixed_param_value)</span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>      mse <span class="op">=</span> term.mse(fixed_param_value, update_trgt)</span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>      grad_component <span class="op">=</span> term.grad_b(fixed_param_value,update_trgt)</span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>    x.append(update_trgt)</span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>    y.append(mse)</span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a>    grad_list.append(grad_component)</span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a>    <span class="co">#plot the start point</span></span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a>    ax.plot(update_trgt, mse, <span class="st">"go"</span>, ms<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a>    updadte_step <span class="op">=</span> <span class="op">-</span> (learning_rate <span class="op">*</span> grad_component)</span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a>    step.append(updadte_step)</span>
+<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a>    update_trgt <span class="op">+=</span> updadte_step</span>
+<span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-62"><a href="#cb16-62" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print(f"mse = {y[i]} , grad = {grad_list[i]} , w = {x[i]}")</span></span>
+<span id="cb16-63"><a href="#cb16-63" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> counter <span class="op">&gt;=</span> <span class="dv">1</span>:</span>
+<span id="cb16-64"><a href="#cb16-64" aria-hidden="true" tabindex="-1"></a>      ax.arrow(x[i<span class="op">-</span><span class="dv">1</span>], y[i<span class="op">-</span><span class="dv">1</span>], step[i<span class="op">-</span><span class="dv">1</span>], y[i] <span class="op">-</span> y[i<span class="op">-</span><span class="dv">1</span>], color<span class="op">=</span><span class="st">"red"</span>, width<span class="op">=</span><span class="fl">0.02</span>, head_width<span class="op">=</span><span class="fl">0.1</span>,head_length<span class="op">=</span><span class="fl">0.10</span>,)</span>
+<span id="cb16-65"><a href="#cb16-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-66"><a href="#cb16-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a>    counter <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb16-68"><a href="#cb16-68" aria-hidden="true" tabindex="-1"></a>  ax2.scatter(x,grad_list, c<span class="op">=</span><span class="st">"red"</span>, s<span class="op">=</span><span class="dv">15</span>)</span>
+<span id="cb16-69"><a href="#cb16-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-70"><a href="#cb16-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-71"><a href="#cb16-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-72"><a href="#cb16-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-73"><a href="#cb16-73" aria-hidden="true" tabindex="-1"></a>fig7,(ax1,ax2), param1 <span class="op">=</span> viz_pderivate(term, term.w_axis, <span class="fl">0.5</span>, <span class="st">"w"</span> )</span>
+<span id="cb16-74"><a href="#cb16-74" aria-hidden="true" tabindex="-1"></a>fig8,(ax3,ax4), param2 <span class="op">=</span> viz_pderivate(term, term.b_axis, <span class="fl">0.5</span>, <span class="st">"b"</span> )</span>
+<span id="cb16-75"><a href="#cb16-75" aria-hidden="true" tabindex="-1"></a><span class="co">#0.13 max</span></span>
+<span id="cb16-76"><a href="#cb16-76" aria-hidden="true" tabindex="-1"></a>viz_update(term, ax1, ax2, <span class="dv">0</span>, param1, <span class="st">"w"</span>, n_loop<span class="op">=</span><span class="dv">8</span>, learning_rate <span class="op">=</span> <span class="fl">0.01</span>)</span>
+<span id="cb16-77"><a href="#cb16-77" aria-hidden="true" tabindex="-1"></a>viz_update(term, ax3, ax4, <span class="dv">0</span>, param2, <span class="st">"b"</span>, n_loop<span class="op">=</span><span class="dv">8</span>, learning_rate <span class="op">=</span> <span class="fl">0.01</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_gd_fundamentals_files/figure-html/cell-15-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_gd_fundamentals_files/figure-html/cell-15-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="limitationen-der-globalen-lernrate-und-der-vereinfachten-update-regel" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="limitationen-der-globalen-lernrate-und-der-vereinfachten-update-regel"><span class="header-section-number">2.7</span> 7. Limitationen der globalen Lernrate und der vereinfachten update Regel</h2>
+<p>Aus den obigen Plots wird deutlich: Eine <strong>einzige, globale Lernrate</strong> <span class="math inline">\(\alpha\)</span> für alle Parameter ist selbst in diesem stark <strong>vereinfachten Szenario</strong> problematisch.</p>
+<section id="was-wir-hier-stark-vereinfacht-haben-die-wichtigsten-punkte" class="level4" data-number="2.7.0.1">
+<h4 data-number="2.7.0.1" class="anchored" data-anchor-id="was-wir-hier-stark-vereinfacht-haben-die-wichtigsten-punkte"><span class="header-section-number">2.7.0.1</span> Was wir hier stark vereinfacht haben ( <strong>die wichtigsten Punkte</strong>):</h4>
+<p><strong>1. Dimensionalität:</strong> Nur 2 Modell Parameter statt Tausende bis Millionen</p>
+<p><strong>2. Stochastizität:</strong> Vollständiger Gradient auf allen Daten, kein Mini-Batch Rauschen</p>
+<p><strong>3. Nicht-Konvexität:</strong> Einfache konvexe Loss-Funktion mit einem globalen Minimum - Reale tiefe neuronale Netze sind <a href="https://www.welchlabs.com/resources/loss-landscape-poster-digital-download?srsltid=AfmBOorX8Ps-T3bo2RDuw4VQNZm-x4YagRo_6y0CnrVUxzCqi2iAXg0m"><strong>Hochgradig nicht-konvex</strong></a> - Unzählige lokale Minima - Sattelpunkte (Gradient = 0, aber kein Minimum) - Flache Plateaus (winzige Gradienten, kaum Fortschritt) - Schmale “Täler” und steile “Klippen” - <strong>Ill-conditioned</strong> Loss-Landschaften - Eine feste LR kann in flachen Regionen stecken bleiben oder in steilen Regionen “überschießen”</p>
+<p><strong>4. Keine Vanishing/Exploding Gradients</strong></p>
+<p><strong>5. Keine Parameter-Abhängigkeiten:</strong> <span class="math inline">\(w\)</span> und <span class="math inline">\(b\)</span> unabhängig betrachtet</p>
+<p><strong>Trotz dieser Vereinfachungen</strong> sehen wir bereits in unserem simplen 2D-Fall: - Unterschiedliche Parameter haben unterschiedliche Gradienten-Skalen - Eine Lernrate, die für <span class="math inline">\(w\)</span> gut funktioniert, kann für <span class="math inline">\(b\)</span> suboptimal sein - Die optimale Lernrate ändert sich während des Trainings (groß am Anfang, kleiner am Ende)</p>
+<p><strong>Ausblick:</strong></p>
+<p>Aber nicht verzweifeln, wenn dir die Begriffe erstmal nichts sagen. Im Laufe meines Kurses werden wir uns damit genauer befassen. Hier geht es erstmal nur darum dir eine Intuition aufzubauen, im hierauf aufbauenden Notebook werden wir uns den Weg vom <strong>GD</strong> zum <strong>Stochastic Gradient Descent</strong> und anderen Optimizern ansschauen, sowie Strategien wie man die lr anpasst.</p>
+</section>
+<section id="unterschiedliche-lernraten" class="level3" data-number="2.7.1">
+<h3 data-number="2.7.1" class="anchored" data-anchor-id="unterschiedliche-lernraten"><span class="header-section-number">2.7.1</span> Unterschiedliche Lernraten</h3>
+<p>Nun schauen wir uns mal an was passiert wenn wir unsere <strong>lr</strong> erhöhen.</p>
+<div id="cell-29" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:1000}}" data-outputid="28e9a043-b16d-43d0-aaf7-1892728d733e">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>term2 <span class="op">=</span> Calculator(x_train,y_train,start_axis<span class="op">=-</span><span class="dv">20</span>,stop_axis<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>fig5,(ax9,ax10), param3 <span class="op">=</span> viz_pderivate(term, term.w_axis, <span class="fl">0.5</span>, <span class="st">"w"</span> )</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>fig6,(ax11,ax12), param4 <span class="op">=</span> viz_pderivate(term, term.w_axis, <span class="fl">0.5</span>, <span class="st">"w"</span> )</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>fig7,(ax13,ax14), param5 <span class="op">=</span> viz_pderivate(term2, term2.w_axis, <span class="fl">0.5</span>, <span class="st">"w"</span> )</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">#0.13 max</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>viz_update(term, ax9, ax10, <span class="dv">0</span>, param3, <span class="st">"w"</span>, n_loop<span class="op">=</span><span class="dv">8</span>, learning_rate <span class="op">=</span> <span class="fl">0.11</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>viz_update(term, ax11, ax12, <span class="dv">0</span>, param4, <span class="st">"w"</span>, n_loop<span class="op">=</span><span class="dv">8</span>, learning_rate <span class="op">=</span> <span class="fl">0.12</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>viz_update(term2, ax13, ax14, <span class="dv">0</span>, param5, <span class="st">"w"</span>, n_loop<span class="op">=</span><span class="dv">10</span>, learning_rate <span class="op">=</span> <span class="fl">0.13</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_gd_fundamentals_files/figure-html/cell-16-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_gd_fundamentals_files/figure-html/cell-16-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_gd_fundamentals_files/figure-html/cell-16-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="erkenntnis" class="level3" data-number="2.7.2">
+<h3 data-number="2.7.2" class="anchored" data-anchor-id="erkenntnis"><span class="header-section-number">2.7.2</span> Erkenntnis:</h3>
+<ol type="1">
+<li><p>Im ersten Plot erkennen wir dass das minimum übersprungen wird, jedoch die Parametupdates trotzdem zum MSE minimum konvergieren</p></li>
+<li><p>Im zweiten Plot mit etwas höherer lr konvergiert das Modell trotzdem nur ist unser updatestep so stark, dass wir das Minimum viel weiter überschiessen als im Plot zuvor und sich dadurch der gradient nicht schnell genung sinkt. Das training kommt sehr langsam voran. Auch wenn wenn wir hier nur eine simple Loss Oberfläche haben, wird beim gedanklichen Übertrag, deutlich dass es bei hochgradig nicht konvexen und hochdimensionalen Oberflächen es keine gute Idee ist unsere Parameter unkontrolliert zu updaten</p></li>
+<li><p>Im dritten Plot ist sorgt die lr dafür dass unser gradient explodiert und wir vom Minimum divergieren.</p></li>
+</ol>
+</section>
+</section>
+<section id="chainrule" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="chainrule"><span class="header-section-number">2.8</span> 8. Chainrule</h2>
+<p>Mithilfe der Kettenregel können wir den Gradienten berechnen. Wir werden das ausfühlich im Notebook <strong>Backpropagation</strong> behandeln, sobald wir bei <strong>tiefen neuronalen Netzten</strong> angekommen sind. <span class="math display">\[
+\Large
+\begin{aligned}
+\nabla_{w,b}\,\text{MSE} &amp;=
+\begin{bmatrix}
+\dfrac{\partial\,\text{MSE}}{\partial w} \\
+\dfrac{\partial\,\text{MSE}}{\partial b}
+\end{bmatrix}
+=
+\frac{2}{n}
+\sum_{i=1}^{n}
+\begin{bmatrix}
+x_i(\hat{y_i} - y_i) \\
+(\hat{y_i} - y_i)
+\end{bmatrix}
+\\[1em]
+\frac{\partial{\text{MSE}}}{\partial{w}}
+&amp;= \frac{\partial{\text{MSE}}}{\partial{\hat{y_i}}}
+   \frac{\partial{\hat{y_i}}}{\partial{w}}
+= \frac{2}{n} \sum_{i=1}^n{x_i (\hat{y_i} - y_i)}
+\\[0.8em]
+\frac{\partial{\text{MSE}}}{\partial{b}}
+&amp;= \frac{\partial{\text{MSE}}}{\partial{\hat{y_i}}}
+   \frac{\partial{\hat{y_i}}}{\partial{b}}
+= \frac{2}{n} \sum_{i=1}^n{(\hat{y_i} - y_i)}
+\end{aligned}
+\]</span></p>
+<div id="cell-32" class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># With Chain rule C/z * z/w (or b)</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> m_grad(x,y,y_hat):</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> (<span class="dv">2</span><span class="op">/</span><span class="bu">len</span>(y)) <span class="op">*</span> ((y_hat<span class="op">-</span>y) <span class="op">*</span> x).<span class="bu">sum</span>()</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> b_grad(y,y_hat):</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="dv">2</span> <span class="op">*</span> (y_hat<span class="op">-</span>y).mean()</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>lr <span class="op">=</span> <span class="fl">0.01</span> <span class="co"># oder lr * 2 und die Ableitung vereinfachen von MSE 1/2n(...)</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> update_target(target, gradient, lr<span class="op">=</span>lr):</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  new_target <span class="op">=</span> target <span class="op">-</span> lr <span class="op">*</span> gradient</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> new_target</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="training" class="level2" data-number="2.9">
+<h2 data-number="2.9" class="anchored" data-anchor-id="training"><span class="header-section-number">2.9</span> 9. Training:</h2>
+<p>Wir trainieren das Modell über 400 Epochen, die Kernidee: 1. Erstelle eine Prediction 2. Berechne den Loss der Prediction zu den True Werten aus dem Train Set 3. Berechne die 2 Komponenten des Gradienten 4. Update w und b mit einer <strong>lr</strong> von 0.01 5. Validiere nun anhand des Val Sets, verwende dabei die updated parameters</p>
+<div id="cell-34" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="51c1c788-a4f0-4556-dff4-22f2568fec39">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>epoch <span class="op">=</span> <span class="dv">400</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>train_loss, val_loss , pred_history <span class="op">=</span> [], [], []</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>w_path, b_path <span class="op">=</span> [], []</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train(x_train,y_train,w,b):</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  y_hat <span class="op">=</span> predict(x_train,w,b)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  pred_history.append(y_hat)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  loss <span class="op">=</span> mse(y_train,y_hat)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  mg <span class="op">=</span> m_grad(x_train,y_train,y_hat)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  bg <span class="op">=</span> b_grad(y_train,y_hat)</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  w <span class="op">=</span> update_target(w,mg)</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  b <span class="op">=</span> update_target(b,bg)</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  w_path.append(w)</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  b_path.append(b)</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> w,b,loss</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> validate(x_val,y_val,w,b):</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>  y_hat_val <span class="op">=</span> predict(x_val, w, b)</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  v_loss <span class="op">=</span> mse(y_val, y_hat_val)</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> v_loss</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> e <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,epoch<span class="op">+</span><span class="dv">1</span>):</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>  w,b,t_loss <span class="op">=</span> train(x_train,y_train,w,b)</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>  v_loss <span class="op">=</span> validate(x_val,y_val,w,b)</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>  train_loss.append(t_loss)</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>  val_loss.append(v_loss)</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"trained w=</span><span class="sc">{</span>w<span class="sc">:4f}</span><span class="ss">, trained b=</span><span class="sc">{</span>b<span class="sc">:4f}</span><span class="ss">"</span>)</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>trained w=1.986688, trained b=1.985263</code></pre>
+</div>
+</div>
+</section>
+<section id="visualisierung-des-loss" class="level2" data-number="2.10">
+<h2 data-number="2.10" class="anchored" data-anchor-id="visualisierung-des-loss"><span class="header-section-number">2.10</span> 10. Visualisierung des Loss</h2>
+<p>Im nächsten Schritt visualisieren wir den train und val loss. Selbst bei einem so simplen Problem gibt es uns ausschlussreiche Informationen welche wir daraus ableiten können. Wir sehen, dass das Modell zunächst schnell Richtung Optimum konvergiert. Anschließend flacht die Kurve sichtbar ab, weil die Gradienten nahe des Minimums sehr klein werden und weitere Verbesserungen nur langsam erfolgen. Der nahezu identische Verlauf von Trainings- und Validierungs-Loss weist darauf hin, dass das Modell sehr gut generalisiert. Der verbleibende Fehler ist damit überwiegend auf den Bias bzw. auf strukturelle Modellgrenzen oder Datenrauschen zurückzuführen und lässt sich durch längeres Training praktisch nicht weiter reduzieren.</p>
+<section id="anmerkung" class="level4" data-number="2.10.0.1">
+<h4 data-number="2.10.0.1" class="anchored" data-anchor-id="anmerkung"><span class="header-section-number">2.10.0.1</span> Anmerkung:</h4>
+<p>Beim Training tiefer neuronaler Netze steigt der Rechenaufwand schnell an, sodass lange Trainingsphasen sehr kostenintensiv werden können. Für ein synthetisch generiertes Dataset wie in unserem Beispiel spielt das zwar keine große Rolle, in realen Szenarien jedoch schon. Eine gängige Maßnahme zur Reduktion von Trainingszeit ist Early Stopping: Bleibt der Validierungs-Loss über mehrere Epochen hinweg unterhalb eines festgelegten Verbesserungs-Schwellwerts, wird das Training automatisch beendet. Dadurch spart man Rechenzeit und verhindert unnötige Optimierungsschritte, die nicht mehr zur Generalisierung beitragen.</p>
+<p>Der Effekt von Early Stopping auf bestimmte Trainingsdynamiken, wie z. B. das sogenannte , <em>[Grokking](https://en.wikipedia.org/wiki/Grokking_(machine_learning)</em> besprechen wir später separat.</p>
+<div id="cell-36" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:410}}" data-outputid="61351a36-8bbf-4649-e336-07042dde6b73">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_loss(train_loss, val_loss):</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">7</span>,<span class="dv">4</span>))</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  ax.plot(train_loss, c<span class="op">=</span><span class="st">"red"</span>, label<span class="op">=</span><span class="st">"Train Loss"</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  ax.plot(val_loss, c<span class="op">=</span> <span class="st">"green"</span>, label <span class="op">=</span><span class="st">"Validation Loss"</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  ax.legend()</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  ax.set_title(<span class="st">"Loss History"</span>)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  ax.grid()</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  ax.set_ylabel(<span class="st">"Loss"</span>)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  ax.set_xlabel(<span class="st">"Epoch"</span>)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>plot_loss(train_loss, val_loss)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_gd_fundamentals_files/figure-html/cell-19-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-37" class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>w_path <span class="op">=</span> np.array(w_path)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>b_path <span class="op">=</span> np.array(b_path)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span>(</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    np.<span class="bu">min</span>(w_path) <span class="op">&gt;=</span> np.<span class="bu">min</span>(term.w_axis)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">and</span> np.<span class="bu">max</span>(w_path) <span class="op">&lt;=</span> np.<span class="bu">max</span>(term.w_axis)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>) ,<span class="st">"Path can't be fully shown, rearrange the term w axis"</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span>(</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    np.<span class="bu">min</span>(b_path) <span class="op">&gt;=</span> np.<span class="bu">min</span>(term.b_axis)</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">and</span> np.<span class="bu">max</span>(b_path) <span class="op">&lt;=</span> np.<span class="bu">max</span>(term.b_axis)</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>), <span class="st">"Path can't be fully shown, rearrange the term b axis"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="update-pfad" class="level3" data-number="2.10.1">
+<h3 data-number="2.10.1" class="anchored" data-anchor-id="update-pfad"><span class="header-section-number">2.10.1</span> Update Pfad</h3>
+<p>In unserer “Loss-Schüssel” können wir den update Pfad einzeichnen. Wie wir schon im <strong>GD</strong> in 1d beobachtet haben, konvergiert w schneller richtung minimum als b.</p>
+<div id="cell-39" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:410}}" data-outputid="869651bf-5aef-4211-dfd0-5de3a335c0f3">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>fi4, ax1, ax2 <span class="op">=</span> mse_contour(term.w_axis, term.b_axis, mse_value, w, b)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> viz_path(ax1,w_path,b_path):</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  ax1.plot(w_path, b_path, <span class="st">".-"</span>, lw<span class="op">=</span><span class="fl">0.5</span>, ms<span class="op">=</span><span class="dv">2</span>, color<span class="op">=</span><span class="st">"w"</span>, label<span class="op">=</span><span class="st">"Update-Path"</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  ax1.plot(w_path[<span class="dv">0</span>], b_path[<span class="dv">0</span>], <span class="st">"wo"</span>, ms<span class="op">=</span><span class="dv">6</span>, label<span class="op">=</span><span class="st">"Start"</span>)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  ax1.legend()</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>viz_path(ax1,w_path,b_path)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_gd_fundamentals_files/figure-html/cell-21-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Hier sehen wir, wie das Modell predicted. Wir können da sehr schön das lernverhalten mit unterschiedlicher <strong>lr</strong> beobachten. Einfach dafür die lr im Notebook erhöhen und die ensprechenden Zellen ausführen.</p>
+<div id="cell-41" class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> timelapse(x,y,predictions,showtime<span class="op">=</span><span class="fl">0.2</span>):</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">7</span>,<span class="dv">4</span>))</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  ax.scatter(x, y, s<span class="op">=</span><span class="dv">3</span>, c<span class="op">=</span><span class="st">"red"</span>, label<span class="op">=</span><span class="st">"noise"</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  ax.grid()</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  ax.set_xlabel(<span class="st">"x"</span>)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  ax.set_ylabel(<span class="st">"prediction"</span>)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  pred_plot <span class="op">=</span> ax.scatter(x, predictions[<span class="dv">0</span>], s<span class="op">=</span><span class="dv">1</span>, c<span class="op">=</span><span class="st">"blue"</span>, label<span class="op">=</span><span class="st">"pred"</span>)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">#ax.set_ylim(-100,100)</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  handle <span class="op">=</span> display(fig, display_id<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> pred <span class="kw">in</span> predictions:</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    offset <span class="op">=</span> np.column_stack((x,pred))</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    pred_plot.set_offsets(offset)</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    fig.canvas.draw_idle()</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    handle.update(fig)</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>    plt.pause(showtime)</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="co">#timelapse(x_train,y_train,pred_history)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+</section>
+<section id="viszualize-gradient-norm" class="level2" data-number="2.11">
+<h2 data-number="2.11" class="anchored" data-anchor-id="viszualize-gradient-norm"><span class="header-section-number">2.11</span> 11. Viszualize Gradient Norm</h2>
+<p>Der Gradient ist ein <strong>Vektor</strong>, der an jedem Punkt <span class="math inline">\((w, b)\)</span> in die Richtung des steilsten Anstiegs zeigt. In unserem Fall hat er zwei Komponenten: die partielle Ableitung nach <span class="math inline">\(w\)</span> und nach <span class="math inline">\(b\)</span>. Diese Struktur macht eine direkte Visualisierung in 3D schwierig, wir müssten an jedem Punkt zwei separate Pfeile oder einen Vektorpfeil zeigen, was schnell unübersichtlich wird. Natürlich gibt es auch Möglichkeiten Losslandscapes in n-dimensionalen Parameterräumen vereinfacht darzustellen, aber das würde den Rahmen unseres Themas hier sprengen.</p>
+<p>Stattdessen visualisieren wir die <strong>Gradient Norm</strong>, also die <strong>Länge des Gradienten-Vektors</strong>:</p>
+<p><span class="math display">\[\|\nabla \text{MSE}\| = \sqrt{\left(\frac{\partial \text{MSE}}{\partial w}\right)^2 + \left(\frac{\partial \text{MSE}}{\partial b}\right)^2}\]</span></p>
+<p>Die Norm ist ein einzelner Skalar-Wert, der uns wichtige Informationen liefert: Sie misst, <strong>wie stark sich die Loss-Funktion an dieser Stelle verändert</strong>, unabhängig von der konkreten Richtung. Eine große Norm bedeutet, dass wir uns in einer steilen Region befinden, egal ob die Steigung von <span class="math inline">\(w\)</span>, von <span class="math inline">\(b\)</span>, oder von beiden kommt. Eine kleine Norm hingegen signalisiert eine flache Region, und im Minimum, Maximum sowie an Sattelpunkten wird die Norm zu Null.</p>
+<p>Die Gradient Norm bestimmt direkt die <strong>Schrittgröße</strong> beim Gradient Descent Update: In Regionen mit großer Norm (steile Hänge) macht dieser vereinfachte Algorithmus große Schritte, während er in flachen Regionen nur kleine Schritte macht. Das sehen wir aus der Visualisierung.</p>
+<div id="cell-43" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:472}}" data-outputid="577dc13d-58db-498f-ad0b-85cd080e56ea">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>term.set_mesh(<span class="dv">0</span>,<span class="dv">4</span>,n<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>db <span class="op">=</span> term.grad_b(term.w_mesh,term.b_mesh)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>dw <span class="op">=</span> term.grad_w(term.w_mesh,term.b_mesh)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>norm <span class="op">=</span> np.sqrt(dw<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> db<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co">#gradienpath</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>w_path <span class="op">=</span> np.array(w_path)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>b_path <span class="op">=</span> np.array(b_path)</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>dw_path <span class="op">=</span> term.grad_w(w_path, b_path)</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>db_path <span class="op">=</span> term.grad_b(w_path, b_path)</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>norm_path <span class="op">=</span> np.sqrt(dw_path<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> db_path<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> show_path(ax, w_path, b_path, path):</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>  ax.plot(w_path,b_path,path,marker<span class="op">=</span><span class="st">"o"</span>,ms<span class="op">=</span><span class="dv">1</span>,linestyle<span class="op">=</span><span class="st">"-"</span>,linewidth<span class="op">=</span><span class="dv">1</span>,c<span class="op">=</span><span class="st">"green"</span>, zorder<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>  ax.scatter(w_path[<span class="dv">0</span>],  b_path[<span class="dv">0</span>],  path[<span class="dv">0</span>] <span class="op">+</span> <span class="fl">0.001</span>,  s<span class="op">=</span><span class="dv">50</span>, c<span class="op">=</span><span class="st">"b"</span>, label<span class="op">=</span><span class="st">"start"</span>, zorder<span class="op">=</span><span class="dv">11</span>)</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>  ax.scatter(w_path[<span class="op">-</span><span class="dv">1</span>], b_path[<span class="op">-</span><span class="dv">1</span>], path[<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> <span class="fl">0.001</span>, s<span class="op">=</span><span class="dv">50</span>, c<span class="op">=</span><span class="st">"r"</span>,label<span class="op">=</span><span class="st">"end"</span>, zorder<span class="op">=</span><span class="dv">11</span>)</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>  ax.legend()</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>fig9,ax9 <span class="op">=</span> surface_3d(term.w_mesh,term.b_mesh,norm,<span class="st">"Gradient Norm"</span>,z_lim<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>ax9.view_init(elev<span class="op">=</span><span class="dv">55</span>, azim<span class="op">=</span><span class="dv">60</span>)</span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>show_path(ax9,w_path,b_path,norm_path)</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>z0 <span class="op">=</span> np.zeros_like(term.w_mesh)</span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>ax9.plot_surface(</span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>    term.w_mesh,</span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>    term.b_mesh,</span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>    z0,</span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">=</span><span class="fl">0.2</span>,</span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>    linewidth<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>    antialiased<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_gd_fundamentals_files/figure-html/cell-23-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="visualisierung-der-gradientenkomponenten" class="level2" data-number="2.12">
+<h2 data-number="2.12" class="anchored" data-anchor-id="visualisierung-der-gradientenkomponenten"><span class="header-section-number">2.12</span> 12. Visualisierung der Gradientenkomponenten</h2>
+<p>In diesen Visualisierungen wird die jeweilige Gradientenkomponente <span class="math inline">\(\frac{\partial L}{\partial w}\)</span> bzw. <span class="math inline">\(\frac{\partial L}{\partial b}\)</span> dargestellt. Die Höhe der Oberfläche zeigt also nicht den Loss an, sondern ausschließlich den Wert der entsprechenden Ableitung an jedem Punkt des Parameterraums.</p>
+<p>Die dargestellte Fläche gibt damit Auskunft darüber, wie stark und in welche Richtung sich die Loss-Funktion lokal verändert.</p>
+<div id="cell-45" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:874}}" data-outputid="0c07b3ab-8718-4b92-b20a-7937f56cb056">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>fig10,ax10 <span class="op">=</span> surface_3d(term.w_mesh,term.b_mesh,db,<span class="st">"Gradient Component b"</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>show_path(ax10,w_path,b_path,db_path)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>fig11,ax11 <span class="op">=</span> surface_3d(term.w_mesh,term.b_mesh,dw,<span class="st">"Gradient Component w"</span>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>show_path(ax11,w_path,w_path,dw_path)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>ax11.view_init(elev<span class="op">=</span><span class="dv">45</span>, azim<span class="op">=</span><span class="dv">120</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_gd_fundamentals_files/figure-html/cell-24-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_gd_fundamentals_files/figure-html/cell-24-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Hiermit haben wir das Thema Gradientenabstieg behandelt und können nun verstehen wie wir dadurch später neuronale Netze nur diesmal mit Aktivierung trainieren. Da wir hier ein lineares Modell beschreiben können wir das einfach auch analytisch lösen mit der Methode der kleinsten Quadrate.</p>
+</section>
+<section id="lineares-modell-und-designmatrix" class="level2" data-number="2.13">
+<h2 data-number="2.13" class="anchored" data-anchor-id="lineares-modell-und-designmatrix"><span class="header-section-number">2.13</span> 13. Lineares Modell und Designmatrix</h2>
+<p>Wir betrachten ein lineares Regressionsmodell. Linear in diesem Kontext bedeutet für uns nicht eine Gerade, sondern bezieht sich auf den Parameterraum <span class="math inline">\(w\)</span>. Der Featureraum <span class="math inline">\(X\)</span> kann nichtlinear sein, beispielsweise <span class="math inline">\([1,\; x,\; x^2]\)</span>.</p>
+<p>Da wir in unserem Fall eine lineare Gleichung approximieren wollen, mit</p>
+<p><span class="math display">\[f(x) = m \cdot x + b,\]</span></p>
+<p>bewegen wir uns in einem zweidimensionalen Parameterraum → <span class="math inline">\(w_1 \cdot x + w_0 \cdot 1\)</span>.</p>
+<p>Natürlich könnte man diesen erweitern, jedoch muss eine Semantik dahinterstecken. Beispielsweise wäre</p>
+<p><span class="math display">\[w_2 \cdot x_1 + w_1 \cdot x_1 + w_0 \cdot 1\]</span></p>
+<p>nichts anderes als</p>
+<p><span class="math display">\[(w_2 + w_1) \cdot x_1 + w_0 \cdot 1.\]</span></p>
+<p>Das ist problematisch, da wir nun in der Designmatrix eine lineare Abhängigkeit geschaffen haben. Dadurch ist <span class="math inline">\(\Phi^\top \Phi\)</span> nicht mehr garantiert invertierbar, weil</p>
+<p><span class="math display">\[\operatorname{rank}(\Phi) &lt; D+1.\]</span></p>
+<p>Das Gleichungssystem hätte dann unendlich viele Lösungen, und die folgende Gleichung könnte nicht mehr verwendet werden und wir müssten einen anderen Ansatz wählen.</p>
+<p>Es gibt Wege, wie man den Feature-Raum über Feature-Engineering sinnvoll erweitern kann. Das werden wir uns jedoch in einem späteren Kapitel anschauen.</p>
+<p><span class="math display">\[
+\hat{y} = f(x; w) = w_0 + w_1 x_1 + \dots + w_D x_D = w^T \phi(x)
+\]</span></p>
+<p>mit</p>
+<p><span class="math display">\[
+\phi(x) =
+\begin{pmatrix}
+1 \\
+x_1 \\
+\vdots \\
+x_D
+\end{pmatrix},
+\quad
+w =
+\begin{pmatrix}
+w_0 \\
+w_1 \\
+\vdots \\
+w_D
+\end{pmatrix}
+\]</span></p>
+<p>Für <span class="math inline">\(n\)</span> Datenpunkte fassen wir alle Feature-Vektoren zu einer <strong>Designmatrix</strong> <span class="math inline">\(\Phi\)</span> zusammen:</p>
+<p><span class="math display">\[
+\Phi =
+\begin{pmatrix}
+\phi(x_1)^T \\
+\phi(x_2)^T \\
+\vdots \\
+\phi(x_n)^T
+\end{pmatrix}
+\in \mathbb{R}^{n \times (D+1)}
+\]</span></p>
+<p>Dann gilt kompakt</p>
+<p><span class="math display">\[
+\hat{y} = \Phi w
+\]</span></p>
+<div id="cell-48" class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> design_matrix(x):</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> np.column_stack((np.ones_like(x),x))</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> x</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>phi_train <span class="op">=</span> design_matrix(x_train)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>phi_val <span class="op">=</span> design_matrix(x_val)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="fehlerfunktion-ssemse-und-normalengleichungen" class="level2" data-number="2.14">
+<h2 data-number="2.14" class="anchored" data-anchor-id="fehlerfunktion-ssemse-und-normalengleichungen"><span class="header-section-number">2.14</span> 14. Fehlerfunktion (SSE/MSE) und Normalengleichungen</h2>
+<p>Wir definieren die Summe der Fehlerquadrate (SSE) als</p>
+<p><span class="math display">\[
+O(w) = \sum_{i=1}^n (y_i - w^T \phi(x_i))^2
+     = \| y - \Phi w \|^2
+     = (y - \Phi w)^T (y - \Phi w)
+\]</span></p>
+<p>Wie wir unschwer ekennen ist der MSE, nicht anderes als eine skalierung des SSE um 1/n.&nbsp;Da sich dadurch das Minimum nicht verändert, können wir uns die Lossoberfläche im oberen Abschnitt anschauen. Dort wird deutlich, dass mit der Konvexität, die wichtigste Eigenschaft der Loss Funktion für den Ansatz erfüllt ist.</p>
+<p><span class="math display">\[
+\tilde{O}(w) = \frac{1}{2} \| y - \Phi w \|^2
+\]</span></p>
+<p>Die Ableitung nach <span class="math inline">\(w\)</span> ergibt:</p>
+<p><span class="math display">\[
+\nabla_w \tilde{O}(w)
+= \Phi^T \Phi w - \Phi^T y
+\]</span></p>
+<p>Minimum: setze <span class="math inline">\(\nabla_w \tilde{O}(w) = 0\)</span>:</p>
+<p><span class="math display">\[
+\Phi^T \Phi w = \Phi^T y
+\]</span></p>
+<p>Das sind die <strong>Normalengleichungen</strong>. Falls <span class="math inline">\(\Phi^T \Phi\)</span> invertierbar ist:</p>
+<p><span class="math display">\[
+\hat{w} = (\Phi^T \Phi)^{-1} \Phi^T y
+\]</span></p>
+<div id="cell-50" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="d4baeb0b-cb3a-4401-dd53-efab98e77510">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>w_hat <span class="op">=</span> np.linalg.inv(phi_train.T <span class="op">@</span> phi_train) <span class="op">@</span> phi_train.T <span class="op">@</span> y_train</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"w_hat = </span><span class="sc">{</span>w_hat<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The parameters we calculated with gradient descent: bias Term: </span><span class="sc">{</span>b<span class="sc">}</span><span class="ss">, w0: </span><span class="sc">{</span>w<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>w_hat = [1.98562596 1.98668856]
+The parameters we calculated with gradient descent: bias Term: 1.9852628900702307, w0: 1.9866878917864874</code></pre>
+</div>
+</div>
+<p>Es ist unschwer zu erkennen, dass wir mit beiden Methoden sehr identische Parameter bekommen haben. Das liegt daran dass wir beim Gradientenabstieg einen iterrativen Optimierungsverfahren benutzen der unsere zufäliig initilaliserten Parameter zu einem niedrigeren Loss konvergieren lässt. Hier wird es analytisch berechnet. Aussage 2 haben wir damit untermauert.</p>
+<blockquote class="blockquote">
+<ol start="2" type="1">
+<li>Durch das hinzufügen von normalverteilten Rauschen ist der Fehler selbst bei wahren Parametern nicht mehr 0 <em>(true_m, true_b)</em> . Das heißt unsere optimalen Modell Parameter unterscheiden sich von den “wahren” Werten.</li>
+</ol>
+</blockquote>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../../docs/beginner/Perceptron.html" class="pagination-link" aria-label="Perzeptron">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Perzeptron</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,6 +1,6 @@
 project:
   type: book
-  output-dir: _site
+  output-dir: site
 
 book:
   title: "Deep Learning Portfolio: Gradient Descent"
@@ -8,7 +8,9 @@ book:
   date: "2025-11-22"
   chapters:
     - index.qmd
+    - docs/beginner/Perceptron.ipynb
     - docs/beginner/gradient_descent/01_gd_fundamentals.ipynb
+
   navbar:
     left:
       - href: index.qmd
@@ -16,13 +18,19 @@ book:
     right:
       - icon: github
         href: https://github.com/
+
   sidebar:
-    style: "docked"
+    style: docked
     search: true
+
   downloads: [pdf, epub]
+
+execute:
+  freeze: false
 
 format:
   html:
     theme: cosmo
     toc: true
     code-fold: show
+
