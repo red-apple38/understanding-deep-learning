@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>1&nbsp; Perzeptron – Deep Learning Portfolio: Gradient Descent</title>
+<title>1&nbsp; Perceptron – Deep Learning Portfolio: Gradient Descent</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -197,7 +197,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../docs/beginner/Perceptron.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Perzeptron</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../docs/beginner/Perceptron.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Perceptron</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -226,7 +226,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../docs/beginner/Perceptron.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Perzeptron</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Perceptron</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -245,35 +245,31 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#reminder" id="toc-reminder" class="nav-link active" data-scroll-target="#reminder"><span class="header-section-number">1.0.1</span> Reminder:</a></li>
-  <li><a href="#ziel-dieses-kapitels" id="toc-ziel-dieses-kapitels" class="nav-link" data-scroll-target="#ziel-dieses-kapitels"><span class="header-section-number">1.0.2</span> Ziel dieses Kapitels :</a></li>
-  <li><a href="#generierung-der-daten-und-visualisierung" id="toc-generierung-der-daten-und-visualisierung" class="nav-link" data-scroll-target="#generierung-der-daten-und-visualisierung"><span class="header-section-number">1.1</span> Generierung der Daten und Visualisierung</a></li>
-  <li><a href="#das-perzeptron-als-modell" id="toc-das-perzeptron-als-modell" class="nav-link" data-scroll-target="#das-perzeptron-als-modell"><span class="header-section-number">1.2</span> Das Perzeptron als Modell</a>
+  <li><a href="#data-generation-and-visualisation" id="toc-data-generation-and-visualisation" class="nav-link active" data-scroll-target="#data-generation-and-visualisation"><span class="header-section-number">1.1</span> Data generation and visualisation</a></li>
+  <li><a href="#the-perceptron-as-a-model" id="toc-the-perceptron-as-a-model" class="nav-link" data-scroll-target="#the-perceptron-as-a-model"><span class="header-section-number">1.2</span> The perceptron as a model</a>
   <ul class="collapse">
-  <li><a href="#eingabe" id="toc-eingabe" class="nav-link" data-scroll-target="#eingabe"><span class="header-section-number">1.2.1</span> 1. Eingabe</a></li>
-  <li><a href="#berechnung" id="toc-berechnung" class="nav-link" data-scroll-target="#berechnung"><span class="header-section-number">1.2.2</span> 2. Berechnung</a></li>
-  <li><a href="#ausgabe" id="toc-ausgabe" class="nav-link" data-scroll-target="#ausgabe"><span class="header-section-number">1.2.3</span> 3. Ausgabe</a></li>
-  <li><a href="#vollständiger-datenfluss" id="toc-vollständiger-datenfluss" class="nav-link" data-scroll-target="#vollständiger-datenfluss"><span class="header-section-number">1.2.4</span> Vollständiger Datenfluss</a></li>
+  <li><a href="#input" id="toc-input" class="nav-link" data-scroll-target="#input"><span class="header-section-number">1.2.1</span> 1. Input</a></li>
+  <li><a href="#calculation" id="toc-calculation" class="nav-link" data-scroll-target="#calculation"><span class="header-section-number">1.2.2</span> 2. Calculation</a></li>
+  <li><a href="#output" id="toc-output" class="nav-link" data-scroll-target="#output"><span class="header-section-number">1.2.3</span> 3. Output</a></li>
+  <li><a href="#complete-data-flow" id="toc-complete-data-flow" class="nav-link" data-scroll-target="#complete-data-flow"><span class="header-section-number">1.2.4</span> Complete data flow</a></li>
   </ul></li>
-  <li><a href="#aktivierungsfunktion-definieren" id="toc-aktivierungsfunktion-definieren" class="nav-link" data-scroll-target="#aktivierungsfunktion-definieren"><span class="header-section-number">1.3</span> Aktivierungsfunktion definieren</a></li>
-  <li><a href="#perzeptron-klasse-implementieren" id="toc-perzeptron-klasse-implementieren" class="nav-link" data-scroll-target="#perzeptron-klasse-implementieren"><span class="header-section-number">1.4</span> Perzeptron-Klasse implementieren</a>
+  <li><a href="#implementing-the-perceptron-class" id="toc-implementing-the-perceptron-class" class="nav-link" data-scroll-target="#implementing-the-perceptron-class"><span class="header-section-number">1.3</span> Implementing the perceptron class</a>
   <ul class="collapse">
-  <li><a href="#klassische-perzeptron-lernregel" id="toc-klassische-perzeptron-lernregel" class="nav-link" data-scroll-target="#klassische-perzeptron-lernregel"><span class="header-section-number">1.4.1</span> Klassische Perzeptron-Lernregel</a></li>
+  <li><a href="#classic-perceptron-learning-rule" id="toc-classic-perceptron-learning-rule" class="nav-link" data-scroll-target="#classic-perceptron-learning-rule"><span class="header-section-number">1.3.1</span> Classic perceptron learning rule</a></li>
   </ul></li>
-  <li><a href="#das-primäre-problem" id="toc-das-primäre-problem" class="nav-link" data-scroll-target="#das-primäre-problem"><span class="header-section-number">1.5</span> Das primäre Problem</a>
+  <li><a href="#the-primary-problem" id="toc-the-primary-problem" class="nav-link" data-scroll-target="#the-primary-problem"><span class="header-section-number">1.4</span> The primary problem</a>
   <ul class="collapse">
-  <li><a href="#fazit" id="toc-fazit" class="nav-link" data-scroll-target="#fazit"><span class="header-section-number">1.5.1</span> Fazit</a></li>
-  <li><a href="#perzeptron-trainieren" id="toc-perzeptron-trainieren" class="nav-link" data-scroll-target="#perzeptron-trainieren"><span class="header-section-number">1.5.2</span> Perzeptron trainieren</a></li>
+  <li><a href="#perzeptron-trainieren" id="toc-perzeptron-trainieren" class="nav-link" data-scroll-target="#perzeptron-trainieren"><span class="header-section-number">1.4.1</span> Perzeptron trainieren</a></li>
   </ul></li>
-  <li><a href="#ergebnisse-auswerten" id="toc-ergebnisse-auswerten" class="nav-link" data-scroll-target="#ergebnisse-auswerten"><span class="header-section-number">1.6</span> Ergebnisse auswerten</a></li>
-  <li><a href="#das-mathematische-modell" id="toc-das-mathematische-modell" class="nav-link" data-scroll-target="#das-mathematische-modell"><span class="header-section-number">1.7</span> Das mathematische Modell</a>
+  <li><a href="#ergebnisse-auswerten" id="toc-ergebnisse-auswerten" class="nav-link" data-scroll-target="#ergebnisse-auswerten"><span class="header-section-number">1.5</span> Ergebnisse auswerten</a></li>
+  <li><a href="#das-mathematische-modell" id="toc-das-mathematische-modell" class="nav-link" data-scroll-target="#das-mathematische-modell"><span class="header-section-number">1.6</span> Das mathematische Modell</a>
   <ul class="collapse">
-  <li><a href="#entscheidungsgrenze-visualisieren" id="toc-entscheidungsgrenze-visualisieren" class="nav-link" data-scroll-target="#entscheidungsgrenze-visualisieren"><span class="header-section-number">1.7.1</span> Entscheidungsgrenze visualisieren</a></li>
+  <li><a href="#entscheidungsgrenze-visualisieren" id="toc-entscheidungsgrenze-visualisieren" class="nav-link" data-scroll-target="#entscheidungsgrenze-visualisieren"><span class="header-section-number">1.6.1</span> Entscheidungsgrenze visualisieren</a></li>
   </ul></li>
-  <li><a href="#training-für-das-or-problem" id="toc-training-für-das-or-problem" class="nav-link" data-scroll-target="#training-für-das-or-problem"><span class="header-section-number">1.8</span> Training für das OR-Problem</a></li>
-  <li><a href="#problem-xor" id="toc-problem-xor" class="nav-link" data-scroll-target="#problem-xor"><span class="header-section-number">1.9</span> Problem Xor</a></li>
-  <li><a href="#auswertung" id="toc-auswertung" class="nav-link" data-scroll-target="#auswertung"><span class="header-section-number">1.10</span> Auswertung</a></li>
-  <li><a href="#ausblick" id="toc-ausblick" class="nav-link" data-scroll-target="#ausblick"><span class="header-section-number">1.11</span> Ausblick</a></li>
+  <li><a href="#training-für-das-or-problem" id="toc-training-für-das-or-problem" class="nav-link" data-scroll-target="#training-für-das-or-problem"><span class="header-section-number">1.7</span> Training für das OR-Problem</a></li>
+  <li><a href="#problem-xor" id="toc-problem-xor" class="nav-link" data-scroll-target="#problem-xor"><span class="header-section-number">1.8</span> Problem Xor</a></li>
+  <li><a href="#auswertung" id="toc-auswertung" class="nav-link" data-scroll-target="#auswertung"><span class="header-section-number">1.9</span> Auswertung</a></li>
+  <li><a href="#ausblick" id="toc-ausblick" class="nav-link" data-scroll-target="#ausblick"><span class="header-section-number">1.10</span> Ausblick</a></li>
   </ul>
 </nav>
     </div>
@@ -282,7 +278,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Perzeptron</span></h1>
+<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Perceptron</span></h1>
 </div>
 
 
@@ -299,19 +295,13 @@ window.Quarto = {
 </header>
 
 
-<p>Das Single Layer Perzeptron ist das einfachste neuronale Netz, welches ein Feauture (Eingabe) nimmt, sie gewichtet daraus die weighted sum bildet und diese dann einer Aktivierungsfunktion übergibt. Das Ergbenis davon kann dann zu binären Klassifikation oder linearen regression verwendet werden. Es ist ein in idealer Startpunkt, um die Grundmechanik neuronaler Netzte zu verstehen, damit wir aufbauend darauf die Grundlagen des Kurses bilden.</p>
-<section id="reminder" class="level3" data-number="1.0.1">
-<h3 data-number="1.0.1" class="anchored" data-anchor-id="reminder"><span class="header-section-number">1.0.1</span> Reminder:</h3>
-<p>An geeigneten Stellen werde ich auf die Implementierungen in pytorch eingehen, aber unser Hauptaugenmerk liegt hier in der Theorie um ein fundiertes Grundverständis aufzubauen.</p>
-</section>
-<section id="ziel-dieses-kapitels" class="level3" data-number="1.0.2">
-<h3 data-number="1.0.2" class="anchored" data-anchor-id="ziel-dieses-kapitels"><span class="header-section-number">1.0.2</span> Ziel dieses Kapitels :</h3>
-<p>Wie verarbeitet ein Neuron Eingaben?</p>
-<p>Wie beeinflussen Gewichte die Entscheidung?</p>
-<p>Was bedeutet „linear trennbar“?</p>
-<p>Und warum scheitert das Perzeptron an manchen Problemen – etwa XOR?</p>
-<p>Dabei geht es nicht um die Nutzung einer Bibliothek, sondern darum zu verstehen, wie ein einzelnes künstliches Neuron tatsächlich arbeitet.</p>
-<div id="cell-1" class="cell" data-execution_count="1">
+<p>The single-layer perceptron is the simplest neural network, which takes a feature (input), weights it to form a weighted sum, and then passes this to an activation function. The result can then be used for binary classification or linear regression (without activation). It is an ideal starting point for understanding the basic mechanics of neural networks, which we will use to build the foundations of the course.</p>
+<p><strong>Objective of this chapter:</strong></p>
+<p>How does a neuron process inputs?</p>
+<p>How do weights influence the decision?</p>
+<p>What does ‘linearly separable’ mean?</p>
+<p>Why does the perceptron fail with some problems, such as XOR?</p>
+<div id="cell-1" class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -321,9 +311,8 @@ window.Quarto = {
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> HTML</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> illustration_utils.plot_image <span class="im">import</span> show_illustration</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>sns.set_theme() </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>sns.set_theme() </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div id="cell-2" class="cell" data-execution_count="2">
@@ -332,12 +321,11 @@ window.Quarto = {
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(seed<span class="op">=</span><span class="dv">23</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-</section>
-<section id="generierung-der-daten-und-visualisierung" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="generierung-der-daten-und-visualisierung"><span class="header-section-number">1.1</span> Generierung der Daten und Visualisierung</h2>
-<p>Zum Einstieg erstellen wir zunächst zweidimenionale Datenpunkten basierend auf den logischen Gattern <strong>AND</strong> / <strong>OR</strong>. Das ermöglicht eine klare visuelle Darstellung und zeigt uns unmittelbar, ob die Daten linear seperabel sind.</p>
-<p>Das von Rosenblatt entwickelte Perzeptron aus dem Jahr <em>1957</em> kann linear nicht seperable Daten wie das <strong>XOR</strong> Problem nicht lösen. Diese Eigenschaft machen wir uns zu Nutze und erzeugen linear trennbare und nicht trennbare Datensätze um die Funktionsweise und Grenzen des Modells sichtbar zu machen.</p>
-<p>Erstellen der Feautures und Labels</p>
+<section id="data-generation-and-visualisation" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="data-generation-and-visualisation"><span class="header-section-number">1.1</span> Data generation and visualisation</h2>
+<p>To begin with, we first create two-dimensional data points based on the logical gates <strong>AND</strong> / <strong>OR</strong>. This enables a clear visual representation and shows us immediately whether the data is linearly separable.</p>
+<p><strong>Info:</strong> The perceptron developed by Rosenblatt in <em>1957</em> cannot solve linearly non-separable data such as the <strong>XOR</strong> problem. We take advantage of this property and generate linearly separable and non-separable data sets to reveal the functioning and limitations of the model.</p>
+<p>Creating features and labels</p>
 <div id="cell-5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:396}}" data-outputid="9da75378-87e3-4756-e696-b74e57f33112" data-execution_count="3">
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -357,7 +345,7 @@ window.Quarto = {
 True y shape: (4, 1)</code></pre>
 </div>
 </div>
-<p>Nun schauen wir uns die Visualisierung der Daten an, durch scharfes sehen ist erkennbar dass diese linear seperabel sind. Zu illustratorischen Zwecken zeichnen ich uns eine <em>fiktive</em> Entscheidungsgrenze ein.</p>
+<p>Now let’s look at the visualisation of the data. By looking closely, we can see that they are linearly separable. For illustrative purposes, I will draw a <em>fictitious</em> decision boundary.</p>
 <div id="cell-7" class="cell" data-execution_count="4">
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -402,26 +390,26 @@ True y shape: (4, 1)</code></pre>
 </div>
 </div>
 </section>
-<section id="das-perzeptron-als-modell" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="das-perzeptron-als-modell"><span class="header-section-number">1.2</span> Das Perzeptron als Modell</h2>
-<p>Das Perzeptron verarbeitet Eingaben in drei aufeinanderfolgenden Schritten:</p>
-<section id="eingabe" class="level3" data-number="1.2.1">
-<h3 data-number="1.2.1" class="anchored" data-anchor-id="eingabe"><span class="header-section-number">1.2.1</span> 1. Eingabe</h3>
-<p>Das Modell erhält einen Eingabevektor <strong>x</strong>, den Featurevektor.</p>
+<section id="the-perceptron-as-a-model" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="the-perceptron-as-a-model"><span class="header-section-number">1.2</span> The perceptron as a model</h2>
+<p>The perceptron processes inputs in three consecutive steps:</p>
+<section id="input" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="input"><span class="header-section-number">1.2.1</span> 1. Input</h3>
+<p>The model receives an input vector <strong>x</strong>, we call this the feature vector.</p>
 </section>
-<section id="berechnung" class="level3" data-number="1.2.2">
-<h3 data-number="1.2.2" class="anchored" data-anchor-id="berechnung"><span class="header-section-number">1.2.2</span> 2. Berechnung</h3>
-<p>Die Eingabe wird über die Gewichte <strong>w</strong> und den Bias-Parameter <strong>b</strong> linear transformiert. <strong>z</strong> nennen wir die gewichtete Summe:</p>
+<section id="calculation" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" class="anchored" data-anchor-id="calculation"><span class="header-section-number">1.2.2</span> 2. Calculation</h3>
+<p>The input is linearly transformed using the weights <strong>w</strong> and the bias parameter <strong>b</strong>. We call the weighted sum <strong>z</strong>:</p>
 <p><span class="math display">\[z = \mathbf{w}^\top \mathbf{x} + b\]</span></p>
 </section>
-<section id="ausgabe" class="level3" data-number="1.2.3">
-<h3 data-number="1.2.3" class="anchored" data-anchor-id="ausgabe"><span class="header-section-number">1.2.3</span> 3. Ausgabe</h3>
-<p>Die gewichtete Summe <strong>z</strong> übergeben wir einer nichtlinearen Aktivierungsfunktion, beim Rosenblatt Perceptron klassisch die Step Function. Beim Perzeptron nennen wir das Ergebnis davon die Prediction des Modells:</p>
-<p><span class="math display">\[\hat{y} = \text{step}(z) = \begin{cases} 1 &amp; \text{falls } z \geq 0 \\ 0 &amp; \text{sonst} \end{cases}\]</span></p>
+<section id="output" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" class="anchored" data-anchor-id="output"><span class="header-section-number">1.2.3</span> 3. Output</h3>
+<p>We pass the weighted sum <strong>z</strong> to a non-linear activation function, which in the Rosenblatt perceptron is classically the step function. In the perceptron, we call the result of this the prediction of the model:</p>
+<p><span class="math display">\[\hat{y} = \text{step}(z) = \begin{cases} 1 &amp; \text{if } z \geq 0 \\ 0 &amp; \text{otherwise} \end{cases}\]</span></p>
 </section>
-<section id="vollständiger-datenfluss" class="level3" data-number="1.2.4">
-<h3 data-number="1.2.4" class="anchored" data-anchor-id="vollständiger-datenfluss"><span class="header-section-number">1.2.4</span> Vollständiger Datenfluss</h3>
-<p>Der gesamte Prozess lässt sich wie folgt darstellen:</p>
+<section id="complete-data-flow" class="level3" data-number="1.2.4">
+<h3 data-number="1.2.4" class="anchored" data-anchor-id="complete-data-flow"><span class="header-section-number">1.2.4</span> Complete data flow</h3>
+<p>The entire process can be represented as follows:</p>
 <p><span class="math display">\[\mathbf{x} \longrightarrow \mathbf{w}^\top \mathbf{x} + b \longrightarrow \text{step}(z) \longrightarrow \hat{y}\]</span></p>
 <hr>
 <div id="cell-9" class="cell" data-execution_count="5">
@@ -440,17 +428,14 @@ True y shape: (4, 1)</code></pre>
 </div>
 </div>
 </div>
-</section>
-</section>
-<section id="aktivierungsfunktion-definieren" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="aktivierungsfunktion-definieren"><span class="header-section-number">1.3</span> Aktivierungsfunktion definieren</h2>
-<p>Neben der eben definierten Step Function, führen wir an dieser Stelle die <strong>Sigmoid</strong> Aktivierungsfunktion ebenfalls ein, welchen wir mit einer modifizierten Lernregel später für das Perzeptron und den Multi Layer Perzeptron verwenden. Im deep learning gibt es eine Vielzahl von verschiedenen Aktivierungen, einige werden wir uns im Verlauf anschauen.</p>
-<p>Eine visuelle Inspektion verrät uns auf Anhieb schon einige Eigenschaften, welche direkt sichbar sind, zusätzlich gibt es <em>versteckte</em> Eigenschaften, welche man nicht durch das scharfe sehen direkt erkennt. Für uns ist das im Moment irrelevant, da wir erstmal eine Intuition zum Workflow bilden wollen. Wir werden das im Kapitel <strong>Aktivierung</strong> und <strong>Featureraum</strong> der <em>Beginnersektion</em> näher beleuchten und später umfassend in der <em>Intermidatesektion</em>.</p>
+<p>Defining the activation function</p>
+<p>In addition to the step function just defined, we will now also introduce the sigmoid activation function, which we will use later with a modified learning rule for the perceptron and the multi-layer perceptron. In deep learning, there are a variety of different activations, some of which we will look at as we go along.</p>
+<p>A visual inspection immediately reveals some properties that are directly visible, but there are also <em>hidden</em> properties that cannot be recognised directly by sharp eyes. This is irrelevant for us at the moment, as we first want to develop an intuition for the workflow. We will examine this in more detail in the <strong>Activation</strong> and <strong>Feature Space</strong> chapters of the <em>Beginners Section</em> and later in the <em>Intermediate Section</em>.</p>
 <p><strong>Sigmoid:</strong> <span class="math display">\[ f(x)=\frac{1}{1+e^{-x}} \]</span></p>
-<p>Man erkennt auf Anhieb: - Wertebereich liegt in <strong>(0,1)</strong> - monoton steigend - für große <strong>|x|</strong> nähert sich der Wert <strong>0</strong> oder <strong>1</strong> an - stetig differenzierbar</p>
-<p>Der Ausgabe der Sigmoid-Funktion kann eine Semantik mitgegeben werden. Für die Binärklassifikation bedeutet das: - <span class="math inline">\(\sigma(z) &lt; 0.5\)</span> → Klasse <strong>0</strong> - <span class="math inline">\(\sigma(z) &gt;= 0.5\)</span> → Klasse <strong>1</strong></p>
-<p><strong>Step Function:</strong></p>
-<p>Man erkennt auf Anhieb: - Werte können nur <strong>0</strong> oder <strong>1</strong> annehmen - <strong>x = 0</strong> ist nicht definiert - selbst wenn differenzierbar, Steigung = 0 -&gt; kein nutzbarer Gradient -&gt; kein Informationsgehalt</p>
+<p>You can see at a glance that: - The value range is in <strong>(0,1)</strong> - Monotonically increasing - For large <strong>|x|</strong>, the value approaches <strong>0</strong> or <strong>1</strong> - Continuously differentiable</p>
+<p>The output of the sigmoid function can be given semantics. For binary classification, this means: - <span class="math inline">\(\sigma(z) &lt; 0.5\)</span> → Class <strong>0</strong> - <span class="math inline">\(\sigma(z) &gt;= 0.5\)</span> → Class <strong>1</strong></p>
+<p><strong>Step function:</strong></p>
+<p>You can see at a glance: - Values can only be <strong>0</strong> or <strong>1</strong> - <strong>x = 0</strong> is not defined - even if differentiable, slope = 0 -&gt; no usable gradient -&gt; no information content</p>
 <div id="cell-11" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:396}}" data-outputid="fb7fd5f6-ddf8-4577-eb96-e6c660997502" data-execution_count="6">
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -486,43 +471,44 @@ True y shape: (4, 1)</code></pre>
 </div>
 </div>
 </section>
-<section id="perzeptron-klasse-implementieren" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="perzeptron-klasse-implementieren"><span class="header-section-number">1.4</span> Perzeptron-Klasse implementieren</h2>
-<p>Nun implementieren wir das Perzeptron als Klasse. Wir haben bereits die Architektur beleuchtet, nun widmen wir uns der Lernregel.</p>
-<section id="klassische-perzeptron-lernregel" class="level3" data-number="1.4.1">
-<h3 data-number="1.4.1" class="anchored" data-anchor-id="klassische-perzeptron-lernregel"><span class="header-section-number">1.4.1</span> Klassische Perzeptron-Lernregel</h3>
-<p>Das Perzeptron lernt, indem es seine Gewichte <strong>nur dann</strong> anpasst, wenn es einen Fehler macht.</p>
-<p>Für jedes Trainingsbeispiel wird die Prediction <span class="math inline">\(\hat{y}\)</span> mit dem wahren Label <span class="math inline">\(y\)</span> verglichen.<br>
-Daraus ergibt sich ein <strong>Fehlerterm</strong>:</p>
+</section>
+<section id="implementing-the-perceptron-class" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="implementing-the-perceptron-class"><span class="header-section-number">1.3</span> Implementing the perceptron class</h2>
+<p>Now we will implement the perceptron as a class. We have already examined the architecture, so now we will focus on the learning rule.</p>
+<section id="classic-perceptron-learning-rule" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="classic-perceptron-learning-rule"><span class="header-section-number">1.3.1</span> Classic perceptron learning rule</h3>
+<p>The perceptron learns by adjusting its weights <strong>only</strong> when it makes a mistake.</p>
+<p>For each training example, the prediction <span class="math inline">\(\hat{y}\)</span> is compared with the true label <span class="math inline">\(y\)</span>.<br>
+This results in an <strong>error term</strong>:</p>
 <p><span class="math display">\[
 \delta = y - \hat{y}
 \]</span></p>
 <ul>
-<li>Wenn <span class="math inline">\(\delta = 0\)</span>:<br>
-Die Vorhersage ist korrekt → <strong>keine</strong> Anpassung.</li>
-<li>Wenn <span class="math inline">\(\delta = 1\)</span>:<br>
-Das Perzeptron hat <span class="math inline">\(0\)</span> vorhergesagt, obwohl <span class="math inline">\(1\)</span> korrekt wäre →<br>
-Die Gewichte sollen in Richtung von <span class="math inline">\(\mathbf{x}\)</span> verschoben werden.</li>
-<li>Wenn <span class="math inline">\(\delta = -1\)</span>:<br>
-Das Perzeptron hat <span class="math inline">\(1\)</span> vorhergesagt, obwohl <span class="math inline">\(0\)</span> korrekt wäre →<br>
-Die Gewichte sollen von <span class="math inline">\(\mathbf{x}\)</span> weg verschoben werden.</li>
+<li>If <span class="math inline">\(\delta = 0\)</span>:<br>
+The prediction is correct → <strong>no</strong> adjustment.</li>
+<li>If <span class="math inline">\(\delta = 1\)</span>:<br>
+The perceptron predicted <span class="math inline">\(0\)</span> although <span class="math inline">\(1\)</span> would be correct →<br>
+The weights should be shifted in the direction of <span class="math inline">\(\mathbf{x}\)</span>.</li>
+<li>If <span class="math inline">\(\delta = -1\)</span>:<br>
+The perceptron predicted <span class="math inline">\(1\)</span> although <span class="math inline">\(0\)</span> would be correct →<br>
+The weights should be shifted away from <span class="math inline">\(\mathbf{x}\)</span>.</li>
 </ul>
-<p>Die <strong>klassische Perzeptron-Lernregel</strong> lautet:</p>
+<p>The <strong>classical perceptron learning rule</strong> is:</p>
 <p><span class="math display">\[
 \mathbf{w} \leftarrow \mathbf{w} + \eta \, \delta \, \mathbf{x}
 \]</span></p>
 <p><span class="math display">\[
 b \leftarrow b + \eta \, \delta
 \]</span></p>
-<p>wobei <span class="math inline">\(\eta\)</span> die Lernrate ist.</p>
-<section id="intuition" class="level4" data-number="1.4.1.1">
-<h4 data-number="1.4.1.1" class="anchored" data-anchor-id="intuition"><span class="header-section-number">1.4.1.1</span> Intuition</h4>
+<p>where <span class="math inline">\(\eta\)</span> is the learning rate.</p>
+<section id="intuition" class="level4" data-number="1.3.1.1">
+<h4 data-number="1.3.1.1" class="anchored" data-anchor-id="intuition"><span class="header-section-number">1.3.1.1</span> Intuition</h4>
 <ul>
-<li>Falsch klassifizierte <strong>positive</strong> Beispiele (<span class="math inline">\(y = 1\)</span>) „ziehen” den Gewichtsvektor in ihre Richtung.</li>
-<li>Falsch klassifizierte <strong>negative</strong> Beispiele (<span class="math inline">\(y = 0\)</span>) „stoßen” den Gewichtsvektor von sich weg.</li>
-<li>Korrekt klassifizierte Beispiele haben keinen Einfluss auf die Gewichte.</li>
+<li>Incorrectly classified <strong>positive</strong> examples (<span class="math inline">\(y = 1\)</span>) ‘pull’ the weight vector in their direction.</li>
+<li>Incorrectly classified <strong>negative</strong> examples (<span class="math inline">\(y = 0\)</span>) ‘push’ the weight vector away from themselves.</li>
+<li>Correctly classified examples have no influence on the weights.</li>
 </ul>
-<p>Auf diese Weise verschiebt das Perzeptron seine Entscheidungsgrenze so lange, bis alle Trainingspunkte (falls linear separierbar) korrekt klassifiziert werden.</p>
+<p>In this way, the perceptron shifts its decision boundary until all training points (if linearly separable) are correctly classified.</p>
 <!-- ## Perzeptron-Klasse implementieren
 Nun implementieren wir das Perzeptron als Klasse. Wir haben bereits die Architektur beleuchtet nun widmen wir uns der Lernregel. 
 ### Klassische Perzeptron-Lernregel
@@ -645,40 +631,42 @@ Auf diese Weise verschiebt das Perzeptron seine Entscheidungsgrenze so lange, bi
 </section>
 </section>
 </section>
-<section id="das-primäre-problem" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="das-primäre-problem"><span class="header-section-number">1.5</span> Das primäre Problem</h2>
-<p>Wir bauen im Laufe des Kurses viele verschiedene Architekturen von Scratch nach. Diese Architekturen werden immer komplexer, und wir werden nicht darum herumkommen, uns mit Bugs und noch schlimmer mit „hidden“ Fehlern zu beschäftigen, die bsw. durch falsche Shapes oder unerwartetes NumPy-Broadcasting entstehen. Deshalb mal ein beispiel wie ich die von Scratch implementierte Trainingsloop getestet habe.</p>
-<p>Broadcasting kann uns das Leben zwar stark erleichtern und ist oft gut darin zu erraten, was wir meinen, zum Beispiel in einer Zeile wie <code>z = X @ self.w + self.b</code>. Aber genau das kann auch dazu führen, dass wir Fehler erst sehr spät entdecken, weil der Code zwar läuft, aber stillschweigend etwas anderes tut als gedacht.</p>
-<p>Leider haben wir hier nur die Präsentationsschicht, nicht das was live bei mir passiert, deshalb, hier mein persönliches „Go-to“, um die Frustration etwas zu senken (ich laufe trotzdem gelegentlich in Bugs rein 😅): (Falls ihr Verbesserungen für mich habt ich bin offen dafür!!!)</p>
-<p>In unserem Workflow haben wir grob: <strong>Daten erstellen → Modell definieren → Training</strong>.</p>
+<section id="the-primary-problem" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="the-primary-problem"><span class="header-section-number">1.4</span> The primary problem</h2>
+<p>Over the course of the course, we will build many different architectures from scratch. These architectures are becoming increasingly complex, and we will have no choice but to deal with bugs and, even worse, ‘hidden’ errors, which can arise, for example, from incorrect shapes or unexpected NumPy broadcasting. So here is an example of how I tested the training loop implemented by Scratch.</p>
+<p>Broadcasting can make our lives a lot easier and is often good at guessing what we mean, for example in a line like <code>z = X @ self.w + self.b</code>. But this can also lead to us discovering errors very late, because the code runs, but silently does something different than intended.</p>
+<p>Unfortunately, we only have the presentation layer here, not what happens live on my end, so here is my personal ‘go-to’ for reducing frustration a bit (I still run into bugs occasionally 😅). If you have any improvements for me, I’m open to them!!!</p>
+<p>In our workflow, we currently have roughly: <strong>Create data → Define model → Training</strong>.</p>
 <ol type="1">
-<li><p><strong>Shapes der Daten inspizieren</strong><br>
-Schau dir die Shapes von <code>X</code> und <code>y</code> an:<br>
-Entsprechen sie wirklich dem, was du im Kopf hast?<br>
-Z.B. <code>X.shape == (n_samples, n_features)</code>, <code>y.shape == (n_samples, 1)</code>.</p></li>
-<li><p><strong>Shapes des Modells prüfen</strong><br>
-Kontrolliere <code>w</code>, <code>b</code> und die Ausgabe von <code>forward</code>:<br>
-Passen die Dimensionen zu deinen Daten? Gibt es offensichtliche Inkonsistenzen?</p></li>
-<li><p><strong>Docstrings + Shape-Konventionen festhalten</strong><br>
-Schreib in den Docstring jeder Methode, mit welchen Shapes sie arbeitet<br>
-(z.B. „X: (n_samples, n_features), Rückgabe: (n_samples, 1)“)<br>
-und halte dich daran. Ich habe oben ein kleines Beispiel gegeben.</p></li>
-<li><p><strong>Dummy-Forward-Pass</strong><br>
-Mach einen einzelnen Forward-Pass mit kleinen Dummy-Daten<br>
-(z.B. 1–2 Samples) und prüfe nur die Shapes der Zwischenwerte:<br>
+<li><p><strong>Inspect the shapes of the data:</strong><br>
+Look at the shapes of <code>X</code> and <code>y</code>:<br>
+Do they really match what you have in mind?<br>
+E.g. <code>X.shape == (n_samples, n_features)</code>, <code>y.shape == (n_samples, 1)</code>.</p></li>
+<li><p><strong>Check the shapes of the model:</strong><br>
+Check <code>w</code>, <code>b</code> and the output of <code>forward</code>:<br>
+Do the dimensions match your data? Are there any obvious inconsistencies?</p></li>
+<li><p><strong>Record docstrings + shape conventions:</strong><br>
+Write in the docstring of each method which shapes it works with<br>
+(e.g.&nbsp;<code>X: (n_samples, n_features), return: (n_samples, 1)</code>)<br>
+and stick to it. I have given a small example above.</p></li>
+<li><p><strong>Dummy forward pass:</strong><br>
+Do a single forward pass with small dummy data<br>
+(e.g.&nbsp;1–2 samples) and only check the shapes of the intermediate values:<br>
 <code>print(X.shape, w.shape, z.shape, a.shape, ...)</code>.</p></li>
-<li><p><strong>Assertions &amp; Prints im Training</strong> Weil wir unsere eigene traningsloop hier von scratch definieren -&gt; Simuliere den Trainingsloop.<br>
-Baue unmengen an <code>assert</code>-Statements ein (z.B. <code>assert y.shape == y_hat.shape</code>)<br>
-und debug-Prints, um zu prüfen, ob die Berechnungen stimmen.</p></li>
-<li><p><strong>Klein anfangen</strong><br>
-Teste neue Architektur-Ideen welche du von scratch nachabauen willst mit kleinen Modellarchitekturen, baue dein Code Modular und erweitere dann.</p></li>
-<li><p><strong>Restart Session</strong> Wenn du mit ipynb Dateien wie hier arbeitest, starte die Umgebung neu, um die Umgebungsvariablen zu löschen. Diesen Fehler habe ich am häufigsten bei anderen beobachtet.</p></li>
-<li><p><strong>Debugger</strong> Der Debugger dient für mich als letzte Bastion. Für Beginner empfehle ich Thonny dafür (will keine Werbung machen XD).</p></li>
-<li><p><strong>Konsole</strong> Nutze die Konsole um schnelle Überprüfungen zu machen.</p></li>
+<li><p><strong>Assertions &amp; Prints in Training:</strong><br>
+Because we are defining our own training loop from scratch here -&gt; Simulate the training loop.<br>
+Incorporate lots of <code>assert</code> statements (e.g.&nbsp;<code>assert y.shape == y_hat.shape</code>)<br>
+and debug prints to check whether the calculations are correct.</p></li>
+<li><p><strong>Start small:</strong><br>
+Test new architecture ideas that you want to build from scratch with small model architectures, build your code modularly and then expand it.</p></li>
+<li><p><strong>Restart session:</strong><br>
+If you are working with ipynb files like here, restart the environment to clear the environment variables. This is the mistake I’ve seen others make most often.</p></li>
+<li><p><strong>Debugger:</strong><br>
+For me, the debugger is my last line of defence. For beginners, I recommend Thonny for this (not trying to advertise XD).</p></li>
+<li><p><strong>Console:</strong><br>
+Use the console to do quick checks.</p></li>
 </ol>
-<section id="fazit" class="level3" data-number="1.5.1">
-<h3 data-number="1.5.1" class="anchored" data-anchor-id="fazit"><span class="header-section-number">1.5.1</span> Fazit</h3>
-<p>Schreibe deine tests, hier also ein besipiel von mir, später kann man das auch noch mit pytests ergänzen aber für Anfänger in python sollte so eine Struktur erstmal reichen.</p>
+<p><strong>Conclusion:</strong> Write your tests, here is an example from me. Later, you can also add pytests, but for beginners in Python, this structure should be sufficient for now.</p>
 <div id="cell-16" class="cell" data-execution_count="8">
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -830,9 +818,8 @@ Correct classification, no update
 === End dummy ===</code></pre>
 </div>
 </div>
-</section>
-<section id="perzeptron-trainieren" class="level3" data-number="1.5.2">
-<h3 data-number="1.5.2" class="anchored" data-anchor-id="perzeptron-trainieren"><span class="header-section-number">1.5.2</span> Perzeptron trainieren</h3>
+<section id="perzeptron-trainieren" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" class="anchored" data-anchor-id="perzeptron-trainieren"><span class="header-section-number">1.4.1</span> Perzeptron trainieren</h3>
 <p>Jetzt können wir das Modell auf unseren AND/OR-Daten trainieren.<br>
 Dabei interessiert uns nicht nur, <strong>ob</strong> das Perzeptron am Ende alles richtig klassifiziert, sondern auch, <strong>wie</strong> sich die Fehlerrate (Error Rate) über die Epochen entwickelt.<br>
 Die Error Rate ist dabei einfach der Anteil der Trainingsbeispiele, die in einer Epoche falsch klassifiziert wurden.<br>
@@ -877,8 +864,8 @@ Solution in Epoch 25</code></pre>
 </div>
 </section>
 </section>
-<section id="ergebnisse-auswerten" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="ergebnisse-auswerten"><span class="header-section-number">1.6</span> Ergebnisse auswerten</h2>
+<section id="ergebnisse-auswerten" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="ergebnisse-auswerten"><span class="header-section-number">1.5</span> Ergebnisse auswerten</h2>
 <p>Nun schauen wir uns an wie das trainierte Perzeptron auf die Eingabedaten reagiert. Manchen Lesern wird sofort klar sein, dass die Predictions und Erwartete Ausgabe identisch sein müssen, da eine Lösung vor der Abbruchbedinung gefunden wurde. Die Error rate für dieses Modell kann nur die Werte: <strong>1</strong> (max Fehlerzähler/4) <strong>0.75</strong> 3/ 4 <strong>0.5</strong> 2/4 <strong>0.25</strong> 1/4 <strong>0</strong> 0/4 annehmen</p>
 <div id="cell-21" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="398ca00a-bb23-4040-9bdb-2f3e8b1c464f" data-execution_count="11">
 <details open="" class="code-fold">
@@ -897,8 +884,8 @@ Eingabe: [1. 1.], Erwartete Ausgabe: [1.], Vorhersage: [1]</code></pre>
 </div>
 </div>
 </section>
-<section id="das-mathematische-modell" class="level2" data-number="1.7">
-<h2 data-number="1.7" class="anchored" data-anchor-id="das-mathematische-modell"><span class="header-section-number">1.7</span> Das mathematische Modell</h2>
+<section id="das-mathematische-modell" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="das-mathematische-modell"><span class="header-section-number">1.6</span> Das mathematische Modell</h2>
 <p>Das trainierte Perzeptron können wir und als Funktion ausgeben lassen. Das dient zur Verständnisbildung, denn neuronale Netze egal ob tief oder nicht sind nichts anderes als mathematische Modelle. Weil das Perzeptron so simpel ist kann man sich das ausgeben lassen, normalerweise untersucht man die gelernten gewichte und den bias. Aber das machen wir in einem späterem Kapitel.</p>
 <div id="cell-23" class="cell" data-execution_count="12">
 <details open="" class="code-fold">
@@ -912,8 +899,8 @@ Eingabe: [1. 1.], Erwartete Ausgabe: [1.], Vorhersage: [1]</code></pre>
 <pre><code>f(x1,x2) = step(0.142*x1 + 0.081*x2 + -0.200)</code></pre>
 </div>
 </div>
-<section id="entscheidungsgrenze-visualisieren" class="level3" data-number="1.7.1">
-<h3 data-number="1.7.1" class="anchored" data-anchor-id="entscheidungsgrenze-visualisieren"><span class="header-section-number">1.7.1</span> Entscheidungsgrenze visualisieren</h3>
+<section id="entscheidungsgrenze-visualisieren" class="level3" data-number="1.6.1">
+<h3 data-number="1.6.1" class="anchored" data-anchor-id="entscheidungsgrenze-visualisieren"><span class="header-section-number">1.6.1</span> Entscheidungsgrenze visualisieren</h3>
 <p>Die <strong>Entscheidungsgrenze</strong> ist hier die Gerade im Feature-Raum, an der das Perzeptron von Klasse 0 auf Klasse 1 „umschaltet“. Für ein Perzeptron mit zwei Eingaben ist das eine Gerade, die wir bereits oben beschrieben haben.</p>
 <p>Wir visualisieren die Entscheidungsgrenze, indem wir auf einem Raster von Punkten (meshgrid) die Vorhersagen des Modells berechnen und mit <code>contourf</code> darstellen. Dadurch sieht man:</p>
 <ul>
@@ -947,8 +934,8 @@ Eingabe: [1. 1.], Erwartete Ausgabe: [1.], Vorhersage: [1]</code></pre>
 </div>
 </section>
 </section>
-<section id="training-für-das-or-problem" class="level2" data-number="1.8">
-<h2 data-number="1.8" class="anchored" data-anchor-id="training-für-das-or-problem"><span class="header-section-number">1.8</span> Training für das OR-Problem</h2>
+<section id="training-für-das-or-problem" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="training-für-das-or-problem"><span class="header-section-number">1.7</span> Training für das OR-Problem</h2>
 <p>Inspizieren wir das auch für das Or-Problem. Da dies wie zu Beginn festgestellt ebenfalls linear seperabel ist,wird ebenfalls eine Lösung gefunden.</p>
 <div id="cell-27" class="cell" data-execution_count="14">
 <details open="" class="code-fold">
@@ -989,8 +976,8 @@ Solution in Epoch 23</code></pre>
 </div>
 </div>
 </section>
-<section id="problem-xor" class="level2" data-number="1.9">
-<h2 data-number="1.9" class="anchored" data-anchor-id="problem-xor"><span class="header-section-number">1.9</span> Problem Xor</h2>
+<section id="problem-xor" class="level2" data-number="1.8">
+<h2 data-number="1.8" class="anchored" data-anchor-id="problem-xor"><span class="header-section-number">1.8</span> Problem Xor</h2>
 <p>Bis jetzt haben wir uns das Verhalten des Perzeptrons für linear seperable Daten angeschaut, wir schauen uns nun die Grenzen des Perzeptrons an, indem wir das zu Beginn erwähnte Problem replizieren. Beim visualisieren der Daten wird sehr schnell klar, dass wir keine lineare decision boundary finden können, welche die Daten linear trennt. Die niedrigst erreichbare Error Rate ist <strong>0.25</strong> außerdem konvergiert das Perzeptron zu einer Update Rate von <strong>1</strong>.</p>
 <div id="cell-30" class="cell" data-execution_count="16">
 <details open="" class="code-fold">
@@ -1055,7 +1042,7 @@ Epoch 90: Error Rate = 0.5000</code></pre>
 </div>
 </div>
 </div>
-<div id="cell-34" class="cell" data-execution_count="19">
+<div id="cell-34" class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>demo_model <span class="op">=</span> Perzeptron(input_size,activation_function<span class="op">=</span>step_function)</span>
@@ -1068,9 +1055,8 @@ Epoch 90: Error Rate = 0.5000</code></pre>
 <span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>    x1_grid, x2_grid, demo_viz,</span>
 <span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    levels<span class="op">=</span><span class="dv">10</span>, cmap<span class="op">=</span><span class="st">"coolwarm"</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, zorder<span class="op">=</span><span class="dv">0</span></span>
 <span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>fig12.colorbar(cf, label<span class="op">=</span><span class="st">"Prediction"</span>)<span class="op">;</span></span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>plt.close(fig12)</span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>plt.close(fig12)</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stderr">
 <pre><code>C:\Users\Admin\AppData\Local\Temp\ipykernel_29568\2921184144.py:11: UserWarning: Adding colorbar to a different Figure &lt;Figure size 700x400 with 3 Axes&gt; than &lt;Figure size 700x400 with 1 Axes&gt; which fig.colorbar is called on.
@@ -46172,8 +46158,8 @@ AAAASUVORK5CYII=\
 </div>
 </div>
 </section>
-<section id="auswertung" class="level2" data-number="1.10">
-<h2 data-number="1.10" class="anchored" data-anchor-id="auswertung"><span class="header-section-number">1.10</span> Auswertung</h2>
+<section id="auswertung" class="level2" data-number="1.9">
+<h2 data-number="1.9" class="anchored" data-anchor-id="auswertung"><span class="header-section-number">1.9</span> Auswertung</h2>
 <p>Auf dem ersten Blick ist sichtbar, dass das Modell nicht zur minimal möglichen Error rate von <strong>0.25</strong> konvergiert(eine Fehlklassifikation). Das hat den einfachen Grund dass wir mit dem Perzeptron kein Optimierungsproblem lösen. Die implemtierte Lernregel besagt nämlich im Kern, trainiere so lange weiter bis du die Klassen seperieren kannst oder die maximale Anzahl an Epochen erreicht sind.</p>
 <p>Damit ist zwar das Verhalten der Error rate erklärt aber nicht wieso die Entscheidungsgrenze sich ab der 20 Epoche nicht mehr verändert.</p>
 <p>Um das zu verstehen, brauchen wir erstmal eine kleine visuelle Einordung der Timelapse und der Modellparameter. Was wir sehen ist immer ein Snapshot des Modellzustandes zum Ende einer Epoche. Also der Zustand der nach dem Update des letzen sampels zustande gekommen ist, hier Feauture -&gt; <strong>(1,1)</strong>.</p>
@@ -46181,8 +46167,8 @@ AAAASUVORK5CYII=\
 \mathbf{w} \leftarrow \mathbf{w} + \eta \, \delta \, \mathbf{x}
 \]</span></p>
 </section>
-<section id="ausblick" class="level2" data-number="1.11">
-<h2 data-number="1.11" class="anchored" data-anchor-id="ausblick"><span class="header-section-number">1.11</span> Ausblick</h2>
+<section id="ausblick" class="level2" data-number="1.10">
+<h2 data-number="1.10" class="anchored" data-anchor-id="ausblick"><span class="header-section-number">1.10</span> Ausblick</h2>
 <p>Im nächsten Kapitel machen wir mit dem logistischen Perzeptron weiter, dafür verwenden wir die oben definierte <strong>Sigmoid</strong> Aktivierungsfunktion. Damit werden 2 fundamentale Änderungen an unserem Modell durchgeführt, die uns den Weg zum Multi Layer Perzeptron vereinfachen werden. Wir werden damit Anfangen ein <strong>Optimierungsproblem</strong> zu lösen. Außerdem wird das Prinzip der <strong>Unsicherheit</strong> eingeführt. Die Ausgabe des Rosenblatt Perzeptrons ist binär, im übertragenen Kontext mit Blick auf Unsicherheit bedeutet es, dass das Perzeptron in seiner Prediction immer zu 100% sicher ist auch wenn diese falsch ist.</p>
 
 
