@@ -259,17 +259,17 @@ window.Quarto = {
   </ul></li>
   <li><a href="#the-primary-problem" id="toc-the-primary-problem" class="nav-link" data-scroll-target="#the-primary-problem"><span class="header-section-number">1.4</span> The primary problem</a>
   <ul class="collapse">
-  <li><a href="#perzeptron-trainieren" id="toc-perzeptron-trainieren" class="nav-link" data-scroll-target="#perzeptron-trainieren"><span class="header-section-number">1.4.1</span> Perzeptron trainieren</a></li>
+  <li><a href="#training-the-perceptron" id="toc-training-the-perceptron" class="nav-link" data-scroll-target="#training-the-perceptron"><span class="header-section-number">1.4.1</span> Training the perceptron</a></li>
   </ul></li>
-  <li><a href="#ergebnisse-auswerten" id="toc-ergebnisse-auswerten" class="nav-link" data-scroll-target="#ergebnisse-auswerten"><span class="header-section-number">1.5</span> Ergebnisse auswerten</a></li>
-  <li><a href="#das-mathematische-modell" id="toc-das-mathematische-modell" class="nav-link" data-scroll-target="#das-mathematische-modell"><span class="header-section-number">1.6</span> Das mathematische Modell</a>
+  <li><a href="#evaluating-results" id="toc-evaluating-results" class="nav-link" data-scroll-target="#evaluating-results"><span class="header-section-number">1.5</span> Evaluating results</a></li>
+  <li><a href="#the-mathematical-model" id="toc-the-mathematical-model" class="nav-link" data-scroll-target="#the-mathematical-model"><span class="header-section-number">1.6</span> The mathematical model</a>
   <ul class="collapse">
-  <li><a href="#entscheidungsgrenze-visualisieren" id="toc-entscheidungsgrenze-visualisieren" class="nav-link" data-scroll-target="#entscheidungsgrenze-visualisieren"><span class="header-section-number">1.6.1</span> Entscheidungsgrenze visualisieren</a></li>
+  <li><a href="#visualising-the-decision-boundary" id="toc-visualising-the-decision-boundary" class="nav-link" data-scroll-target="#visualising-the-decision-boundary"><span class="header-section-number">1.6.1</span> Visualising the decision boundary</a></li>
   </ul></li>
-  <li><a href="#training-für-das-or-problem" id="toc-training-für-das-or-problem" class="nav-link" data-scroll-target="#training-für-das-or-problem"><span class="header-section-number">1.7</span> Training für das OR-Problem</a></li>
+  <li><a href="#training-for-the-or-problem" id="toc-training-for-the-or-problem" class="nav-link" data-scroll-target="#training-for-the-or-problem"><span class="header-section-number">1.7</span> Training for the OR problem</a></li>
   <li><a href="#problem-xor" id="toc-problem-xor" class="nav-link" data-scroll-target="#problem-xor"><span class="header-section-number">1.8</span> Problem Xor</a></li>
-  <li><a href="#auswertung" id="toc-auswertung" class="nav-link" data-scroll-target="#auswertung"><span class="header-section-number">1.9</span> Auswertung</a></li>
-  <li><a href="#ausblick" id="toc-ausblick" class="nav-link" data-scroll-target="#ausblick"><span class="header-section-number">1.10</span> Ausblick</a></li>
+  <li><a href="#evaluation" id="toc-evaluation" class="nav-link" data-scroll-target="#evaluation"><span class="header-section-number">1.9</span> Evaluation</a></li>
+  <li><a href="#outlook" id="toc-outlook" class="nav-link" data-scroll-target="#outlook"><span class="header-section-number">1.10</span> Outlook</a></li>
   </ul>
 </nav>
     </div>
@@ -818,13 +818,13 @@ Correct classification, no update
 === End dummy ===</code></pre>
 </div>
 </div>
-<section id="perzeptron-trainieren" class="level3" data-number="1.4.1">
-<h3 data-number="1.4.1" class="anchored" data-anchor-id="perzeptron-trainieren"><span class="header-section-number">1.4.1</span> Perzeptron trainieren</h3>
-<p>Jetzt können wir das Modell auf unseren AND/OR-Daten trainieren.<br>
-Dabei interessiert uns nicht nur, <strong>ob</strong> das Perzeptron am Ende alles richtig klassifiziert, sondern auch, <strong>wie</strong> sich die Fehlerrate (Error Rate) über die Epochen entwickelt.<br>
-Die Error Rate ist dabei einfach der Anteil der Trainingsbeispiele, die in einer Epoche falsch klassifiziert wurden.<br>
-Dafür visualisieren wir den Verlauf der Error Rate während des Trainings.</p>
-<div id="cell-18" class="cell" data-execution_count="9">
+<section id="training-the-perceptron" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" class="anchored" data-anchor-id="training-the-perceptron"><span class="header-section-number">1.4.1</span> Training the perceptron</h3>
+<p>Now we can train the model on our AND/OR data.<br>
+We are not only interested in <strong>whether</strong> the perceptron classifies everything correctly in the end, but also in <strong>how</strong> the error rate develops over the epochs.<br>
+The error rate is simply the proportion of training examples that were incorrectly classified in an epoch.<br>
+To do this, we visualise the error rate curve during training.</p>
+<div id="cell-18" class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> visualize_training(error_history):</span>
@@ -864,9 +864,14 @@ Solution in Epoch 25</code></pre>
 </div>
 </section>
 </section>
-<section id="ergebnisse-auswerten" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="ergebnisse-auswerten"><span class="header-section-number">1.5</span> Ergebnisse auswerten</h2>
-<p>Nun schauen wir uns an wie das trainierte Perzeptron auf die Eingabedaten reagiert. Manchen Lesern wird sofort klar sein, dass die Predictions und Erwartete Ausgabe identisch sein müssen, da eine Lösung vor der Abbruchbedinung gefunden wurde. Die Error rate für dieses Modell kann nur die Werte: <strong>1</strong> (max Fehlerzähler/4) <strong>0.75</strong> 3/ 4 <strong>0.5</strong> 2/4 <strong>0.25</strong> 1/4 <strong>0</strong> 0/4 annehmen</p>
+<section id="evaluating-results" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="evaluating-results"><span class="header-section-number">1.5</span> Evaluating results</h2>
+<p>Now let’s take a look at how the trained perceptron responds to the input data. Some readers will immediately realise that the predictions and expected output must be identical, as a solution was found before the termination condition was reached. The error rate for this model can only be one of the following values:</p>
+<p><strong>1</strong> (max error counter/4)</p>
+<p><strong>0.75</strong> -&gt; 3/4</p>
+<p><strong>0.5</strong> -&gt; 2/4</p>
+<p><strong>0.25</strong> -&gt; 1/4</p>
+<p><strong>0</strong> -&gt; 0/4</p>
 <div id="cell-21" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="398ca00a-bb23-4040-9bdb-2f3e8b1c464f" data-execution_count="11">
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -884,9 +889,9 @@ Eingabe: [1. 1.], Erwartete Ausgabe: [1.], Vorhersage: [1]</code></pre>
 </div>
 </div>
 </section>
-<section id="das-mathematische-modell" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="das-mathematische-modell"><span class="header-section-number">1.6</span> Das mathematische Modell</h2>
-<p>Das trainierte Perzeptron können wir und als Funktion ausgeben lassen. Das dient zur Verständnisbildung, denn neuronale Netze egal ob tief oder nicht sind nichts anderes als mathematische Modelle. Weil das Perzeptron so simpel ist kann man sich das ausgeben lassen, normalerweise untersucht man die gelernten gewichte und den bias. Aber das machen wir in einem späterem Kapitel.</p>
+<section id="the-mathematical-model" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="the-mathematical-model"><span class="header-section-number">1.6</span> The mathematical model</h2>
+<p>We can output the trained perceptron as a function. This helps us understand it, since neural networks, whether deep or not, are nothing more than mathematical models. Since the perceptron is so simple, we can look at the function to understand it better. Normally, we would examine the learned weights and biases. However, we will do that in a separate chapter.</p>
 <div id="cell-23" class="cell" data-execution_count="12">
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -899,13 +904,13 @@ Eingabe: [1. 1.], Erwartete Ausgabe: [1.], Vorhersage: [1]</code></pre>
 <pre><code>f(x1,x2) = step(0.142*x1 + 0.081*x2 + -0.200)</code></pre>
 </div>
 </div>
-<section id="entscheidungsgrenze-visualisieren" class="level3" data-number="1.6.1">
-<h3 data-number="1.6.1" class="anchored" data-anchor-id="entscheidungsgrenze-visualisieren"><span class="header-section-number">1.6.1</span> Entscheidungsgrenze visualisieren</h3>
-<p>Die <strong>Entscheidungsgrenze</strong> ist hier die Gerade im Feature-Raum, an der das Perzeptron von Klasse 0 auf Klasse 1 „umschaltet“. Für ein Perzeptron mit zwei Eingaben ist das eine Gerade, die wir bereits oben beschrieben haben.</p>
-<p>Wir visualisieren die Entscheidungsgrenze, indem wir auf einem Raster von Punkten (meshgrid) die Vorhersagen des Modells berechnen und mit <code>contourf</code> darstellen. Dadurch sieht man:</p>
+<section id="visualising-the-decision-boundary" class="level3" data-number="1.6.1">
+<h3 data-number="1.6.1" class="anchored" data-anchor-id="visualising-the-decision-boundary"><span class="header-section-number">1.6.1</span> Visualising the decision boundary</h3>
+<p>The <strong>decision boundary</strong> here is the straight line in the feature space at which the perceptron ‘switches’ from class 0 to class 1. However, we should not get too hung up on the geometric shape at this point, because in 3D feature space at the latest, we should be aware that we need a surface there.</p>
+<p>We visualise the decision boundary here by calculating the model’s predictions on a grid of points (meshgrid) and displaying them with <code>contourf</code>. This shows that:</p>
 <ul>
-<li>Die Vorhersage springt von <strong>0 auf 1</strong>. Es gibt keine Werte dazwischen, das sehen wir auch durch die colorbar.</li>
-<li>Die Grenze wirkt immer <strong>treppenförmiger</strong> mit kleinerem n, weil wir nur auf einem Gitter auswerten. Das widerspricht auf dem erstem Blick der definierten Funktion, aber dass sind halt die Grenzen eines Plotters. Bei meinem eigenem Funktionsplotter den ich programmiert hatte, hatte ich ebenfalls das selbe Problem.</li>
+<li>The prediction jumps from <strong>0 to 1</strong>. There are no values in between, as we can also see from the colour bar.</li>
+<li>The boundary always appears more <strong>staircase-like</strong> with smaller n, because we are only evaluating on a grid. At first glance, this contradicts the defined shape of the decision boundary, but these are simply the limitations of a plotter. I had the same problem with my own function plotter that I had programmed.</li>
 </ul>
 <div id="cell-25" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:573}}" data-outputid="ef64199c-87f8-4da6-880f-15aaf024b936" data-execution_count="13">
 <details open="" class="code-fold">
@@ -934,9 +939,9 @@ Eingabe: [1. 1.], Erwartete Ausgabe: [1.], Vorhersage: [1]</code></pre>
 </div>
 </section>
 </section>
-<section id="training-für-das-or-problem" class="level2" data-number="1.7">
-<h2 data-number="1.7" class="anchored" data-anchor-id="training-für-das-or-problem"><span class="header-section-number">1.7</span> Training für das OR-Problem</h2>
-<p>Inspizieren wir das auch für das Or-Problem. Da dies wie zu Beginn festgestellt ebenfalls linear seperabel ist,wird ebenfalls eine Lösung gefunden.</p>
+<section id="training-for-the-or-problem" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="training-for-the-or-problem"><span class="header-section-number">1.7</span> Training for the OR problem</h2>
+<p>Let us also examine this for the OR problem. Since this is also linearly separable, as stated at the beginning, a solution is also found.</p>
 <div id="cell-27" class="cell" data-execution_count="14">
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -978,7 +983,7 @@ Solution in Epoch 23</code></pre>
 </section>
 <section id="problem-xor" class="level2" data-number="1.8">
 <h2 data-number="1.8" class="anchored" data-anchor-id="problem-xor"><span class="header-section-number">1.8</span> Problem Xor</h2>
-<p>Bis jetzt haben wir uns das Verhalten des Perzeptrons für linear seperable Daten angeschaut, wir schauen uns nun die Grenzen des Perzeptrons an, indem wir das zu Beginn erwähnte Problem replizieren. Beim visualisieren der Daten wird sehr schnell klar, dass wir keine lineare decision boundary finden können, welche die Daten linear trennt. Die niedrigst erreichbare Error Rate ist <strong>0.25</strong> außerdem konvergiert das Perzeptron zu einer Update Rate von <strong>1</strong>.</p>
+<p>So far, we have looked at the behaviour of the perceptron for linearly separable data. We will now examine the limitations of the perceptron by replicating the problem mentioned at the beginning. When visualising the data, it quickly becomes clear that we cannot find a linear decision boundary that separates the data linearly. The lowest achievable error rate is <strong>0.25</strong>.</p>
 <div id="cell-30" class="cell" data-execution_count="16">
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -1025,7 +1030,7 @@ Epoch 90: Error Rate = 0.5000</code></pre>
 </div>
 </div>
 </div>
-<p>Schauen wir uns nun an, wieso die Errorrate gegen <strong>0.5</strong> konvergiert. Wir können uns eine Timelapse erstellen, um die Verschiebung der Entscheidungsgrenzen schnell zu veranschaulichen. Darüber hinaus schauen wir uns die Entwicklung der Modellparameter und der Update Rate über die Epochen an.</p>
+<p>Let us now examine why the error rate converges towards <strong>0.5</strong>. We can create a time lapse to quickly illustrate the shift in decision boundaries. In addition, we will examine the updating of model parameters and the update rate across epochs.</p>
 <div id="cell-33" class="cell" data-execution_count="18">
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -46158,18 +46163,18 @@ AAAASUVORK5CYII=\
 </div>
 </div>
 </section>
-<section id="auswertung" class="level2" data-number="1.9">
-<h2 data-number="1.9" class="anchored" data-anchor-id="auswertung"><span class="header-section-number">1.9</span> Auswertung</h2>
-<p>Auf dem ersten Blick ist sichtbar, dass das Modell nicht zur minimal möglichen Error rate von <strong>0.25</strong> konvergiert(eine Fehlklassifikation). Das hat den einfachen Grund dass wir mit dem Perzeptron kein Optimierungsproblem lösen. Die implemtierte Lernregel besagt nämlich im Kern, trainiere so lange weiter bis du die Klassen seperieren kannst oder die maximale Anzahl an Epochen erreicht sind.</p>
-<p>Damit ist zwar das Verhalten der Error rate erklärt aber nicht wieso die Entscheidungsgrenze sich ab der 20 Epoche nicht mehr verändert.</p>
-<p>Um das zu verstehen, brauchen wir erstmal eine kleine visuelle Einordung der Timelapse und der Modellparameter. Was wir sehen ist immer ein Snapshot des Modellzustandes zum Ende einer Epoche. Also der Zustand der nach dem Update des letzen sampels zustande gekommen ist, hier Feauture -&gt; <strong>(1,1)</strong>.</p>
-<p>Die konstante updaterate von 1 impliziert das jedes Trainingsample für das darauf folgende Sample ein update ausgelöst hat, also ein delta != 0. Die Gewichte haben sich somit unweigerlich verändert, nur wurde wurde es wieder überschrieben, da das delta dauernd zwischen -1 und 1 schwingt. Das wird aus der update Regel auch deutlich, welche auch auf den Bias übertragen werden kann. <span class="math display">\[
+<section id="evaluation" class="level2" data-number="1.9">
+<h2 data-number="1.9" class="anchored" data-anchor-id="evaluation"><span class="header-section-number">1.9</span> Evaluation</h2>
+<p>At first glance, it is clear that the model does not converge to the minimum possible error rate of <strong>0.25</strong> (one misclassification). The simple reason for this is that we are not solving an optimisation problem with the perceptron. The implemented learning rule essentially states: continue training until you can separate the classes or the maximum number of epochs has been reached.</p>
+<p>This explains the behaviour of the error rate, but not why the decision boundary no longer changes after the 20th epoch.</p>
+<p>To understand this, we first need a little visual classification of the timelapse and the model parameters. What we see is always a snapshot of the model state at the end of an epoch. In other words, the state that resulted after the last sample was updated, in this case Feature -&gt; <strong>(1,1)</strong>.</p>
+<p>The constant update rate of 1 implies that each training sample triggered an update for the following sample, i.e.&nbsp;a <code>delta != 0</code>. The weights have therefore inevitably changed, but they have been overwritten again because the delta constantly fluctuates between -1 and 1. This is also clear from the update rule, which can also be applied to the bias. <span class="math display">\[
 \mathbf{w} \leftarrow \mathbf{w} + \eta \, \delta \, \mathbf{x}
 \]</span></p>
 </section>
-<section id="ausblick" class="level2" data-number="1.10">
-<h2 data-number="1.10" class="anchored" data-anchor-id="ausblick"><span class="header-section-number">1.10</span> Ausblick</h2>
-<p>Im nächsten Kapitel machen wir mit dem logistischen Perzeptron weiter, dafür verwenden wir die oben definierte <strong>Sigmoid</strong> Aktivierungsfunktion. Damit werden 2 fundamentale Änderungen an unserem Modell durchgeführt, die uns den Weg zum Multi Layer Perzeptron vereinfachen werden. Wir werden damit Anfangen ein <strong>Optimierungsproblem</strong> zu lösen. Außerdem wird das Prinzip der <strong>Unsicherheit</strong> eingeführt. Die Ausgabe des Rosenblatt Perzeptrons ist binär, im übertragenen Kontext mit Blick auf Unsicherheit bedeutet es, dass das Perzeptron in seiner Prediction immer zu 100% sicher ist auch wenn diese falsch ist.</p>
+<section id="outlook" class="level2" data-number="1.10">
+<h2 data-number="1.10" class="anchored" data-anchor-id="outlook"><span class="header-section-number">1.10</span> Outlook</h2>
+<p>In the next chapter, we will continue with the logistic perceptron, using the <strong>sigmoid</strong> activation function defined above. This will introduce two fundamental changes to our model that will simplify the path to the multi-layer perceptron. We will start by solving an <strong>optimisation problem</strong>. In addition, the principle of <strong>uncertainty</strong> will be introduced. The output of the Rosenblatt perceptron is binary and does not contain any information about how certain the model is. In contrast, the logistic model with sigmoid provides a continuous output in (0,1), which can be interpreted as probability and thus provides a measure of uncertainty. In the figurative context with regard to uncertainty, this means that the perceptron is always 100% certain in its prediction, even if it is wrong.</p>
 
 
 </section>
