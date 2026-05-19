@@ -8,3 +8,4 @@ ipykernel
 jupyterlab
 matplotlib
 seaborn
+scikit-learn
