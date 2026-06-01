@@ -89,6 +89,18 @@ def visualize_training(error_history):
     ax.legend()
     return fig, ax
 
+def visualize_loss(error_history):
+    epochs = np.arange(1, len(error_history) + 1)
+    fig, ax = plt.subplots(figsize=(7, 4))
+
+    ax.plot(epochs,error_history, label="Train Loss", c="r")
+    ax.set_xlabel("Epoch")
+    ax.set_ylabel("Loss")
+    ax.set_title("Model Loss per Epoch")
+    ax.legend()
+    return fig, ax
+
+
 def ex_boundary_helper(ax: plt.Axes, intercept: float, x: np.ndarray | None = None) -> np.ndarray:
     if x is None:
         x = np.linspace(-1, 1, 100)
