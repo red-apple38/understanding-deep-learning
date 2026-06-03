@@ -89,15 +89,37 @@ def visualize_training(error_history):
     ax.legend()
     return fig, ax
 
-def visualize_loss(error_history):
-    epochs = np.arange(1, len(error_history) + 1)
-    fig, ax = plt.subplots(figsize=(7, 4))
+def visualize_loss(loss_history, y_label, x_label, ax=None, title="Training Loss"):
+    """ 
+    Visualizes the loss history.
 
-    ax.plot(epochs,error_history, label="Train Loss", c="r")
-    ax.set_xlabel("Epoch")
-    ax.set_ylabel("Loss")
-    ax.set_title("Model Loss per Epoch")
-    ax.legend()
+    Args:
+        loss_history:
+            List of loss values.
+        y_label:
+            Label for the y-axis.
+        x_label:
+            Label for the x-axis.
+        ax:
+            Optional matplotlib axes object. If None, a new figure and axes are created.
+        title:
+            Plot title.
+
+    Returns:
+        fig, ax:
+            Matplotlib figure and axes.
+    """
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(7, 4))
+    else:
+        fig = ax.figure
+
+    ax.plot(loss_history)
+    ax.set_title(title)
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label)
+    ax.grid(ls=":", linewidth=0.6)
+
     return fig, ax
 
 
