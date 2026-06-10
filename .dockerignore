@@ -1,0 +1,38 @@
+# Version control and repository automation
+.git/
+.github/
+
+# Local Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Packaging and coverage output
+*.egg-info/
+build/
+dist/
+.coverage
+.coverage.*
+htmlcov/
+
+# Notebook and Quarto output
+.ipynb_checkpoints/
+.quarto/
+**/*.quarto_ipynb
+site/
+_site/
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
