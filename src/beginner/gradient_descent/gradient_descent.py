@@ -30,12 +30,11 @@ def visualize_surface_3d(
 ):
     """
     Visualizes a 3D surface.
-
     Args:
         x_mesh (np.ndarray):
             Meshgrid values for the x-axis
         y_mesh (np.ndarray):
-            Meshgrid values for the y-axis
+            Meshgrid values for the y-axis 
         z_values (np.ndarray):
             Surface values with the same shape as x_mesh and y_mesh
         x_label (str):
