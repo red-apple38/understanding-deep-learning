@@ -3,27 +3,45 @@ project:
   output-dir: site
 
 book:
-  title: "Deep Learning Portfolio: Gradient Descent"
-  author: "Your Name"
-  date: "2025-11-22"
+  title: "Understanding Deep Learning"
+  author: "Ali Bozkoyun"
   chapters:
-    - index.qmd
-    - docs/beginner/Perceptron.ipynb
-    - docs/beginner/gradient_descent/01_gd_fundamentals.ipynb
-
-  navbar:
-    left:
-      - href: index.qmd
-        text: Home
-    right:
-      - icon: github
-        href: https://github.com/
+    - text: Welcome
+      href: index.qmd
+    - part: Beginner
+      chapters:
+        - text: Perceptron
+          href: docs/beginner/Perceptron.ipynb
+        - text: Gradient Descent Fundamentals
+          href: docs/beginner/gradient_descent/01_gd_fundamentals.ipynb
+        - text: SGD and Other Optimizers
+          href: docs/beginner/gradient_descent/02_sgd_and_others.ipynb
+        - text: Logistic Perceptron
+          href: docs/beginner/Logistic_perceptron.ipynb
 
   sidebar:
     style: docked
     search: true
-
-  downloads: [pdf, epub]
+    collapse-level: 3
+    tools:
+      - icon: github
+        href: https://github.com/red-apple38/understanding-deep-learning
+        aria-label: GitHub repository
+    contents:
+      - text: Welcome
+        href: index.qmd
+      - section: Beginner
+        contents:
+          - text: Perceptron
+            href: docs/beginner/Perceptron.ipynb
+          - section: Gradient Descent
+            contents:
+              - text: Gradient Descent Fundamentals
+                href: docs/beginner/gradient_descent/01_gd_fundamentals.ipynb
+              - text: SGD and Other Optimizers
+                href: docs/beginner/gradient_descent/02_sgd_and_others.ipynb
+          - text: Logistic Perceptron
+            href: docs/beginner/Logistic_perceptron.ipynb
 
 execute:
   freeze: false
@@ -33,4 +51,5 @@ format:
     theme: cosmo
     toc: true
     code-fold: show
+    number-sections: false
 

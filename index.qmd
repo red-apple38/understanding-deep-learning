@@ -1,3 +1,1 @@
-# Welcome {.unnumbered}
-
-Welcome to the Deep Learning Portfolio Project.
+Welcome to Understanding Deep Learning.
