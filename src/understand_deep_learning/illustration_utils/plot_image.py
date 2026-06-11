@@ -3,7 +3,7 @@ import matplotlib.image as mpimg
 from pathlib import Path
 
 # Define the path to the assets directory using pathlib
-ASSETS_DIR = Path(__file__).resolve().parents[2] / "docs" / "assets"
+ASSETS_DIR = Path(__file__).resolve().parents[3] / "docs" / "assets"
 
 def show_illustration(
     image_relative_path,

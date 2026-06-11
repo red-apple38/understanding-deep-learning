@@ -1,13 +1,19 @@
 from unittest.mock import MagicMock
 
-from illustration_utils.plot_image import show_illustration
+from understand_deep_learning.illustration_utils.plot_image import show_illustration
 
 
 def test_show_illustration_image_only(mocker):
     # Patch dependencies using the mocker fixture (requires pytest-mock)
-    mock_plt = mocker.patch("illustration_utils.plot_image.plt")
-    mock_mpimg = mocker.patch("illustration_utils.plot_image.mpimg")
-    mock_assets = mocker.patch("illustration_utils.plot_image.ASSETS_DIR")
+    mock_plt = mocker.patch(
+        "understand_deep_learning.illustration_utils.plot_image.plt"
+    )
+    mock_mpimg = mocker.patch(
+        "understand_deep_learning.illustration_utils.plot_image.mpimg"
+    )
+    mock_assets = mocker.patch(
+        "understand_deep_learning.illustration_utils.plot_image.ASSETS_DIR"
+    )
 
     # Setup fig, ax
     mock_fig, mock_ax = MagicMock(), MagicMock()
@@ -29,9 +35,15 @@ def test_show_illustration_image_only(mocker):
 
 
 def test_show_illustration_with_source(mocker):
-    mock_plt = mocker.patch("illustration_utils.plot_image.plt")
-    mock_mpimg = mocker.patch("illustration_utils.plot_image.mpimg")
-    mock_assets = mocker.patch("illustration_utils.plot_image.ASSETS_DIR")
+    mock_plt = mocker.patch(
+        "understand_deep_learning.illustration_utils.plot_image.plt"
+    )
+    mock_mpimg = mocker.patch(
+        "understand_deep_learning.illustration_utils.plot_image.mpimg"
+    )
+    mock_assets = mocker.patch(
+        "understand_deep_learning.illustration_utils.plot_image.ASSETS_DIR"
+    )
 
     mock_fig, mock_ax = MagicMock(), MagicMock()
     mock_plt.subplots.return_value = (mock_fig, mock_ax)
@@ -57,8 +69,12 @@ def test_show_illustration_with_source(mocker):
 
 
 def test_show_illustration_with_explicit_assets_dir(mocker, tmp_path):
-    mock_plt = mocker.patch("illustration_utils.plot_image.plt")
-    mock_mpimg = mocker.patch("illustration_utils.plot_image.mpimg")
+    mock_plt = mocker.patch(
+        "understand_deep_learning.illustration_utils.plot_image.plt"
+    )
+    mock_mpimg = mocker.patch(
+        "understand_deep_learning.illustration_utils.plot_image.mpimg"
+    )
 
     mock_fig, mock_ax = MagicMock(), MagicMock()
     mock_plt.subplots.return_value = (mock_fig, mock_ax)
