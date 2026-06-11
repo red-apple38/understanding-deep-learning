@@ -1,11 +1,6 @@
-import pytest
-import sys
-import os
 from unittest.mock import MagicMock
-from illustration_utils.plot_image import show_illustration
 
-# Add src to path so we can import the module
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../src')))
+from illustration_utils.plot_image import show_illustration
 
 
 def test_show_illustration_image_only(mocker):
@@ -31,6 +26,7 @@ def test_show_illustration_image_only(mocker):
 
     assert fig is mock_fig
     assert ax is mock_ax
+
 
 def test_show_illustration_with_source(mocker):
     mock_plt = mocker.patch("illustration_utils.plot_image.plt")
