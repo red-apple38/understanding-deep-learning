@@ -1,11 +1,6 @@
-import pytest
-import sys
-import os
 from unittest.mock import MagicMock
-from illustration_utils.plot_image import show_illustration
 
-# Add src to path so we can import the module
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../src')))
+from illustration_utils.plot_image import show_illustration
 
 
 def test_show_illustration_image_only(mocker):
@@ -31,6 +26,7 @@ def test_show_illustration_image_only(mocker):
 
     assert fig is mock_fig
     assert ax is mock_ax
+
 
 def test_show_illustration_with_source(mocker):
     mock_plt = mocker.patch("illustration_utils.plot_image.plt")
@@ -58,3 +54,20 @@ def test_show_illustration_with_source(mocker):
     mock_plt.figtext.assert_called_once()
     args, _ = mock_plt.figtext.call_args
     assert "Test Source" in args[2]
+
+
+def test_show_illustration_with_explicit_assets_dir(mocker, tmp_path):
+    mock_plt = mocker.patch("illustration_utils.plot_image.plt")
+    mock_mpimg = mocker.patch("illustration_utils.plot_image.mpimg")
+
+    mock_fig, mock_ax = MagicMock(), MagicMock()
+    mock_plt.subplots.return_value = (mock_fig, mock_ax)
+
+    image_path = tmp_path / "image.png"
+    image_path.touch()
+
+    fig, ax = show_illustration("image.png", assets_dir=tmp_path)
+
+    mock_mpimg.imread.assert_called_once_with(str(image_path))
+    assert fig is mock_fig
+    assert ax is mock_ax

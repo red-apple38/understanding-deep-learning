@@ -1,24 +1,38 @@
+# Python bytecode and caches
 __pycache__/
-*.pyc
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments and local environment files
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+
+# Packaging and coverage output
+*.egg-info/
+build/
+dist/
+.coverage
+.coverage.*
+htmlcov/
+
+# Jupyter and Quarto
 .ipynb_checkpoints/
 .quarto/
-_site/
-.pytest_cache/
-
-
-/.quarto/
 **/*.quarto_ipynb
+site/
+_site/
 
-# OS
-.DS_Store
-Thumbs.db
-
-# IDE
+# IDEs
 .vscode/
 .idea/
 
-# Python distribution
-*.egg-info/
+# Operating systems
+.DS_Store
+Thumbs.db
 
-.venv/
-.env
+/.quarto/

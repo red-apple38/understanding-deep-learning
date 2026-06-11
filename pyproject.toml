@@ -5,18 +5,41 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "understand_deep_learning"
 version = "0.1.0"
-description = "Deep Learning Course Materials"
+description = "Didactic deep learning course materials and reusable examples"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+dependencies = [
+    "matplotlib>=3.8,<4",
+    "numpy>=1.26,<3",
+]
+
+[project.optional-dependencies]
+course = [
+    "ipykernel>=6,<8",
+    "ipython>=8,<10",
+    "jupyterlab>=4,<5",
+    "pandas>=2,<3",
+    "plotly>=5,<7",
+    "scikit-learn>=1.4,<2",
+    "seaborn>=0.13,<1",
+    "streamlit>=1.30,<2",
+]
+dev = [
+    "black>=24,<27",
+    "pytest>=8,<10",
+    "pytest-mock>=3.14,<4",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]
+namespaces = true
 
 [tool.black]
 line-length = 88
-target-version = ['py311']
+target-version = ["py311"]
 
 [tool.pytest.ini_options]
-minversion = "6.0"
+minversion = "8.0"
 addopts = "-ra -q"
-testpaths = [
-    "tests",
-]
+testpaths = ["tests"]
